@@ -41,16 +41,6 @@ class PuzzleState():
     def is_legal_position(self, position):
         return position[0] >= 0 and position[0] < self._size and position[1] >= 0 and position[1] < self._size
 
-    def switch_positions(self, start_position, end_position):
-        start_value = self.get_value(start_position)
-        end_value = self.get_value(end_position)
-        
-        new_state = deepcopy(self._state)
-        new_state[start_position[0]][start_position[1]] = end_value
-        new_state[end_position[0]][end_position[1]] = start_value
-
-        return PuzzleState(new_state)
-
     def get_next_states(self, start_value):
         position = self.get_position(start_value)
         if not position:
@@ -61,9 +51,19 @@ class PuzzleState():
         moved_left = (position[0], position[1] - 1)
 
         possible_next_positions = [moved_up, moved_right, moved_down, moved_left]
-        next_positions = [self.switch_positions(position, pos) for pos in possible_next_positions if self.is_legal_position(pos)]
+        next_positions = [self._switch_positions(position, pos) for pos in possible_next_positions if self.is_legal_position(pos)]
 
         return next_positions
+
+    def _switch_positions(self, start_position, end_position):
+        start_value = self.get_value(start_position)
+        end_value = self.get_value(end_position)
+        
+        new_state = deepcopy(self._state)
+        new_state[start_position[0]][start_position[1]] = end_value
+        new_state[end_position[0]][end_position[1]] = start_value
+
+        return PuzzleState(new_state)
 
     def _set_positions(self):
         positions = {}
