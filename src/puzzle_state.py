@@ -4,13 +4,17 @@ from copy  import deepcopy
 class PuzzleState():
     """Represents a puzzle state"""
 
-    def __init__(self, state):
+    def __init__(self, state, level):
         self.state = state
         self._size = len(state)
+        self._level = level
         self._set_positions()
 
     def __str__(self):
         return str(self._state)
+
+    def __eq__(self, other_state):
+        return self.state == other_state.state
 
     @property
     def state(self):
@@ -19,6 +23,10 @@ class PuzzleState():
     @property
     def size(self):
         return self._size
+    
+    @property
+    def level(self):
+        return self._level
 
     @property
     def positions(self):
@@ -30,6 +38,12 @@ class PuzzleState():
         for row in state:
             state_as_list.append(list(row))
         self._state = state_as_list
+
+    def get_f_value(self):
+        return self._f_value
+
+    def set_f_value(self, heuristic_func, goal_state):
+        self._f_value = 2*heuristic_func(self, goal_state) + self.level
 
     def get_position(self, value):
         return self._positions.get(value)
@@ -64,7 +78,7 @@ class PuzzleState():
         new_state[start_position[0]][start_position[1]] = end_value
         new_state[end_position[0]][end_position[1]] = start_value
 
-        return PuzzleState(new_state)
+        return PuzzleState(new_state, self._level + 1)
 
     def _set_positions(self):
         positions = {}
@@ -98,3 +112,67 @@ class PuzzleState():
             distance += row_distance + col_distance
 
         return distance
+
+    @staticmethod
+    def sum_permutation(state, goal_state):
+        sum = 0
+
+        for row in goal_state.state:
+            for current in row:
+                left = []
+                is_left = True
+                for row in goal_state.state:
+                    for value in row:
+                        if value == current:
+                            is_left = False
+                        if is_left and value != current:
+                            left.append(value)
+
+                is_right = False
+                for row in state.state:
+                    for value in row:
+                        if is_right and value in left:
+                            sum += 1
+                        if value == current:
+                            is_right = True
+
+        return sum
+
+    @staticmethod
+    def a_star(start_state, goal_state, heuristic_func):
+        current_state = start_state
+        current_state.set_f_value(heuristic_func, goal_state)
+        open_list = [start_state]
+        closed_list = []
+
+        while PuzzleState.hamming_distance(current_state, goal_state) != 0 and len(open_list) != 0:
+            current_state = open_list[0]
+
+            if current_state in closed_list:
+                del open_list[0]
+                current_state = open_list[0]
+                continue
+
+            for start in range(1, 10):
+                next_best_states = current_state.get_next_states(start)
+                for state in next_best_states:
+                    if state not in open_list:
+                        state.set_f_value(heuristic_func, goal_state)
+                        open_list.append(state)
+                        
+            closed_list.append(current_state)
+            open_list.sort(key = lambda x:x.get_f_value())
+
+        if len(open_list) == 0:
+            return []
+
+        # Backtrack to get path
+        reversed_search_list = list(reversed(closed_list))
+        level = reversed_search_list[0].level
+        path_list = [reversed_search_list[0]]
+        for state in reversed_search_list:
+            if state.level == level - 1 and PuzzleState.manhattan_distance(state, path_list[-1]) == 2:
+                level -= 1
+                path_list.append(state)
+
+        return path_list
