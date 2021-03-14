@@ -16,17 +16,20 @@ def main():
     assert PuzzleState.manhattan_distance(state, goal) == 6
     assert PuzzleState.sum_permutation(state, goal) == 5
 
-    # Test A* using Manhattan distance as heuristic
+    # Test A* using all heuristics
     start_state = create_random_puzzle(3)
     goal_state = create_random_puzzle(3)
-    search_list = PuzzleState.a_star(start_state, goal_state, PuzzleState.manhattan_distance)
-    search_list.reverse()
-
+    heuristics = [PuzzleState.sum_permutation, PuzzleState.hamming_distance, PuzzleState.manhattan_distance]
     print("start:", start_state)
     print("goal:", goal_state)
-    print("path:")
-    for index, state in enumerate(search_list):
-        print(state, state.level)
+
+    for heuristic in heuristics:
+        print(heuristic.__name__, "path")
+        search_list = PuzzleState.a_star(start_state, goal_state, heuristic)
+        search_list.reverse()
+
+        for index, state in enumerate(search_list):
+            print(state, state.level)
 
 
 if __name__ == '__main__':

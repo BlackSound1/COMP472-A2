@@ -145,6 +145,7 @@ class PuzzleState:
         current_state.set_f_value(heuristic_func, goal_state)
         open_list = [start_state]
         closed_list = []
+        highest_value = goal_state.size**2-1
 
         while PuzzleState.hamming_distance(current_state, goal_state) != 0 and len(open_list) != 0:
             current_state = open_list[0]
@@ -154,7 +155,7 @@ class PuzzleState:
                 current_state = open_list[0]
                 continue
 
-            for start in range(1, 10):
+            for start in range(1, highest_value):
                 next_best_states = current_state.get_next_states(start)
                 for state in next_best_states:
                     if state not in open_list:
@@ -166,6 +167,8 @@ class PuzzleState:
 
         if len(open_list) == 0:
             return []
+        elif len(open_list) == 1:
+            return open_list
 
         # Backtrack to get path
         reversed_search_list = list(reversed(closed_list))
