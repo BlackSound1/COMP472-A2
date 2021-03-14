@@ -1,7 +1,7 @@
-from copy  import deepcopy
+from copy import deepcopy
 
 
-class PuzzleState():
+class PuzzleState:
     """Represents a puzzle state"""
 
     def __init__(self, state, level):
@@ -23,7 +23,7 @@ class PuzzleState():
     @property
     def size(self):
         return self._size
-    
+
     @property
     def level(self):
         return self._level
@@ -43,7 +43,7 @@ class PuzzleState():
         return self._f_value
 
     def set_f_value(self, heuristic_func, goal_state):
-        self._f_value = 2*heuristic_func(self, goal_state) + self.level
+        self._f_value = 2 * heuristic_func(self, goal_state) + self.level
 
     def get_position(self, value):
         return self._positions.get(value)
@@ -59,21 +59,22 @@ class PuzzleState():
     def get_next_states(self, start_value):
         position = self.get_position(start_value)
         if not position:
-            return [] 
+            return []
         moved_up = (position[0] - 1, position[1])
         moved_down = (position[0] + 1, position[1])
         moved_right = (position[0], position[1] + 1)
         moved_left = (position[0], position[1] - 1)
 
         possible_next_positions = [moved_up, moved_right, moved_down, moved_left]
-        next_positions = [self._switch_positions(position, pos) for pos in possible_next_positions if self.is_legal_position(pos)]
+        next_positions = [self._switch_positions(position, pos) for pos in possible_next_positions if
+                          self.is_legal_position(pos)]
 
         return next_positions
 
     def _switch_positions(self, start_position, end_position):
         start_value = self.get_value(start_position)
         end_value = self.get_value(end_position)
-        
+
         new_state = deepcopy(self._state)
         new_state[start_position[0]][start_position[1]] = end_value
         new_state[end_position[0]][end_position[1]] = start_value
@@ -97,7 +98,7 @@ class PuzzleState():
 
         for row_index, row in enumerate(state_tuple):
             for val_index, val in enumerate(row):
-                if (state_tuple[row_index][val_index] != goal_state_tuple[row_index][val_index]):
+                if state_tuple[row_index][val_index] != goal_state_tuple[row_index][val_index]:
                     distance += 1
 
         return distance
@@ -159,9 +160,9 @@ class PuzzleState():
                     if state not in open_list:
                         state.set_f_value(heuristic_func, goal_state)
                         open_list.append(state)
-                        
+
             closed_list.append(current_state)
-            open_list.sort(key = lambda x:x.get_f_value())
+            open_list.sort(key=lambda x: x.get_f_value())
 
         if len(open_list) == 0:
             return []
