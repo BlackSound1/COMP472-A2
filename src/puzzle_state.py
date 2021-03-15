@@ -4,9 +4,10 @@ from copy import deepcopy
 class PuzzleState:
     """Represents a puzzle state"""
 
-    def __init__(self, state, level):
+    def __init__(self, state, level=0, parent=None):
         self.state = state
         self._size = len(state)
+        self._parent = parent
         self._level = level
         self._set_positions()
 
@@ -79,7 +80,7 @@ class PuzzleState:
         new_state[start_position[0]][start_position[1]] = end_value
         new_state[end_position[0]][end_position[1]] = start_value
 
-        return PuzzleState(new_state, self._level + 1)
+        return PuzzleState(new_state, self._level + 1, self)
 
     def _set_positions(self):
         positions = {}
@@ -170,13 +171,15 @@ class PuzzleState:
         elif len(open_list) == 1:
             return open_list
 
-        # Backtrack to get path
+        # Backtrack last state's ancestor to get path
         reversed_search_list = list(reversed(closed_list))
-        level = reversed_search_list[0].level
-        path_list = [reversed_search_list[0]]
-        for state in reversed_search_list:
-            if state.level == level - 1 and PuzzleState.manhattan_distance(state, path_list[-1]) == 2:
-                level -= 1
-                path_list.append(state)
+        last_state = reversed_search_list[0]
+        path_list = [last_state]
+        
+        parent = last_state._parent
+        while parent is not None:
+            path_list.append(parent)
+            parent = parent._parent
+        path_list.reverse()
 
         return path_list
