@@ -1,5 +1,5 @@
 from puzzle_state import *
-from functions import create_random_puzzle
+from functions import create_random_puzzle, print_solution_path
 
 
 def main():
@@ -34,48 +34,24 @@ def main():
 
     print("start:", start_state)
     print("goal:", goal_state)
-
     print("search path:")
     for index, state in enumerate(dfs_search_path):
         print(state, state.level)
-
     print("solution path:")
-    if dfs_result:
-        temp = dfs_result.parent
-        solution_path = [dfs_result]
-        while temp:
-            solution_path.append(temp)
-            temp = temp.parent
-        solution_path.reverse()
-        for index, state in enumerate(solution_path):
-            print(state, state.level)
-    else:
-        print("no solution")
+    print_solution_path(dfs_result)
 
     # Iterative Deepening
     start_state = create_random_puzzle(2)
     goal_state = PuzzleState(((1, 2), (3, 4)), 0)
-    di_result, di_search_path = PuzzleState.deep_iterating(start_state, goal_state, 100)
+    iter_result, iter_search_path = PuzzleState.deep_iterating(start_state, goal_state, 100)
 
     print("start:", start_state)
     print("goal:", goal_state)
-
     print("search path:")
-    for index, state in enumerate(di_search_path):
+    for index, state in enumerate(iter_search_path):
         print(state, state.level)
-
     print("solution path:")
-    if di_result:
-        temp = di_result.parent
-        solution_path = [di_result]
-        while temp:
-            solution_path.append(temp)
-            temp = temp.parent
-        solution_path.reverse()
-        for index, state in enumerate(solution_path):
-            print(state, state.level)
-    else:
-        print("no solution")
+    print_solution_path(iter_result)
 
 
 if __name__ == '__main__':
