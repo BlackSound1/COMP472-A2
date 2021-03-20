@@ -1,13 +1,14 @@
 from copy import deepcopy
 
 
-class PuzzleState:
+class PuzzleState():
     """Represents a puzzle state"""
 
-    def __init__(self, state, level):
+    def __init__(self, state, level, parent=None):
         self.state = state
         self._size = len(state)
         self._level = level
+        self.parent = parent
         self._set_positions()
 
     def __str__(self):
@@ -15,6 +16,15 @@ class PuzzleState:
 
     def __eq__(self, other_state):
         return self.state == other_state.state
+
+    def __hash__(self):
+        return hash(('state', list(self.state)))
+
+    def isIn(self, a):
+        for node in a:
+            if (self == node):
+                return True
+        return False
 
     @property
     def state(self):
@@ -79,7 +89,7 @@ class PuzzleState:
         new_state[start_position[0]][start_position[1]] = end_value
         new_state[end_position[0]][end_position[1]] = start_value
 
-        return PuzzleState(new_state, self._level + 1)
+        return PuzzleState(new_state, self._level + 1, self)
 
     def _set_positions(self):
         positions = {}
@@ -100,18 +110,15 @@ class PuzzleState:
             for val_index, val in enumerate(row):
                 if state_tuple[row_index][val_index] != goal_state_tuple[row_index][val_index]:
                     distance += 1
-
         return distance
 
     @staticmethod
     def manhattan_distance(state, goal_state):
         distance = 0
-
         for value, position in state.positions.items():
             row_distance = abs(position[0] - goal_state.get_position(value)[0])
             col_distance = abs(position[1] - goal_state.get_position(value)[1])
             distance += row_distance + col_distance
-
         return distance
 
     @staticmethod
@@ -136,7 +143,6 @@ class PuzzleState:
                             sum += 1
                         if value == current:
                             is_right = True
-
         return sum
 
     @staticmethod
@@ -177,3 +183,55 @@ class PuzzleState:
                 path_list.append(state)
 
         return path_list
+
+    @staticmethod
+    def depth_first_search(start, goal):
+        open_list = []
+        closed_list = []
+        open_list.append(start)
+
+        while open_list:
+            X = open_list.pop()
+            if X == goal:
+                closed_list.append(X)
+                return X, closed_list
+            else:
+                X_children = ([X.get_next_states(i)[j] for i in range(1, (start.size ** 2) + 1) for j in
+                               range(len(X.get_next_states(i)))])
+                closed_list.append(X)
+                for children in X_children:
+                    if not children.isIn(open_list) and not children.isIn(closed_list):
+                        open_list.append(children)
+        return None, closed_list
+
+    @staticmethod
+    def deep_iterating(start, goal, max_depth):
+        closed_list = []
+        for i in range(max_depth):
+            open_list = []
+            closed_list = []
+            result, closed_list = PuzzleState.dfs_limited(open_list, closed_list, start, goal, i)
+            if result and result == goal:
+                return result, closed_list
+        return None, closed_list
+
+    @staticmethod
+    def dfs_limited(open_list, closed_list, start, goal, max_iter):
+        open_list.append(start)
+        k = 1
+        while open_list:
+            X = open_list.pop()
+
+            if X == goal:
+                closed_list.append(X)
+                return X, closed_list
+            else:
+                closed_list.append(X)
+                if k <= max_iter:
+                    X_children = ([X.get_next_states(i)[j] for i in range(1, (start.size ** 2) + 1) for j in
+                                   range(len(X.get_next_states(i)))])
+                    k += 1
+                    for children in X_children:
+                        if not children.isIn(open_list) and not children.isIn(closed_list):
+                            open_list.append(children)
+        return None, closed_list
