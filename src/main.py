@@ -1,5 +1,5 @@
 from puzzle_state import *
-from functions import create_random_puzzle
+from functions import *
 
 
 def main():
