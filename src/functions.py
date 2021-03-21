@@ -1,4 +1,4 @@
-from src.puzzle_state import PuzzleState
+from puzzle_state import PuzzleState
 from random import shuffle
 
 
