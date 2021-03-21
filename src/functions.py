@@ -28,17 +28,15 @@ def create_20_random_puzzles(size: int = 3) -> None:
     for i in range(20):
         shuffle(list_of_possible_numbers)
 
-        new_tuple = tuple(create_tuple_of_tuples_of_numbers(list_of_possible_numbers, size))
+        new_tuple = create_tuple_of_tuples_of_numbers(list_of_possible_numbers, size)
 
         list_of_tuples.append(new_tuple)
 
-    tuple_of_tuples = tuple(list_of_tuples)
-
-    write_puzzles_to_file(tuple_of_tuples)
+    write_puzzles_to_file(list_of_tuples)
 
 
 def write_goal_state_to_file(list_of_possible_numbers, size):
-    goal_state = tuple(create_tuple_of_tuples_of_numbers(list_of_possible_numbers, size))
+    goal_state = create_tuple_of_tuples_of_numbers(list_of_possible_numbers, size)
     with open('../input/goal_state.txt', 'wt') as file:
         file.flush()
         file.write(str(goal_state))
@@ -52,8 +50,8 @@ def write_puzzles_to_file(tuple_of_tuples):
 
 
 def create_tuple_of_tuples_of_numbers(list_of_possible_numbers, size):
-    return [tuple(list_of_possible_numbers[x: x + size]) for x in
-            range(0, len(list_of_possible_numbers), size)]
+    return tuple([tuple(list_of_possible_numbers[x: x + size]) for x in
+            range(0, len(list_of_possible_numbers), size)])
 
 
 def get_all_puzzles():
