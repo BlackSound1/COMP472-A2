@@ -20,12 +20,6 @@ class PuzzleState():
     def __hash__(self):
         return hash(('state', list(self.state)))
 
-    def isIn(self, a):
-        for node in a:
-            if (self == node):
-                return True
-        return False
-
     @property
     def state(self):
         return self._state
@@ -191,16 +185,18 @@ class PuzzleState():
         open_list.append(start)
 
         while open_list:
-            X = open_list.pop()
-            if X == goal:
-                closed_list.append(X)
-                return X, closed_list
+            current_state = open_list.pop()
+            if current_state == goal:
+                closed_list.append(current_state)
+                return current_state, closed_list
             else:
-                X_children = ([X.get_next_states(i)[j] for i in range(1, (start.size ** 2) + 1) for j in
-                               range(len(X.get_next_states(i)))])
-                closed_list.append(X)
-                for children in X_children:
-                    if not children.isIn(open_list) and not children.isIn(closed_list):
+                state_children = ([current_state.get_next_states(i)[j]
+                                   for i in range(1, (start.size ** 2) + 1)
+                                   for j in range(len(current_state.get_next_states(i)))
+                                   ])
+                closed_list.append(current_state)
+                for children in state_children:
+                    if children not in open_list and not children not in closed_list:
                         open_list.append(children)
         return None, closed_list
 
@@ -208,30 +204,32 @@ class PuzzleState():
     def deep_iterating(start, goal, max_depth):
         closed_list = []
         for i in range(max_depth):
-            open_list = []
-            closed_list = []
-            result, closed_list = PuzzleState.dfs_limited(open_list, closed_list, start, goal, i)
+            result, closed_list = PuzzleState.dfs_limited(start, goal, i)
             if result and result == goal:
                 return result, closed_list
         return None, closed_list
 
     @staticmethod
-    def dfs_limited(open_list, closed_list, start, goal, max_iter):
+    def dfs_limited(start, goal, max_iter):
+        open_list = []
+        closed_list = []
         open_list.append(start)
         k = 1
         while open_list:
-            X = open_list.pop()
+            current_state = open_list.pop()
 
-            if X == goal:
-                closed_list.append(X)
-                return X, closed_list
+            if current_state == goal:
+                closed_list.append(current_state)
+                return current_state, closed_list
             else:
-                closed_list.append(X)
+                closed_list.append(current_state)
                 if k <= max_iter:
-                    X_children = ([X.get_next_states(i)[j] for i in range(1, (start.size ** 2) + 1) for j in
-                                   range(len(X.get_next_states(i)))])
+                    state_children = ([current_state.get_next_states(i)[j]
+                                       for i in range(1, (start.size ** 2) + 1)
+                                       for j in range(len(current_state.get_next_states(i)))
+                                       ])
                     k += 1
-                    for children in X_children:
-                        if not children.isIn(open_list) and not children.isIn(closed_list):
+                    for children in state_children:
+                        if children not in open_list and not children not in closed_list:
                             open_list.append(children)
         return None, closed_list
