@@ -34,9 +34,9 @@ def main():
     start_state = create_random_puzzle(2)
     goal_state = PuzzleState(((1, 2), (3, 4)), 0)
     dfs_result, dfs_search_path = PuzzleState.depth_first_search(start_state, goal_state)
-
     print("start:", start_state)
     print("goal:", goal_state)
+
     print("search path:")
     for index, state in enumerate(dfs_search_path):
         print(state, state.level)
@@ -47,9 +47,9 @@ def main():
     start_state = create_random_puzzle(2)
     goal_state = PuzzleState(((1, 2), (3, 4)), 0)
     iter_result, iter_search_path = PuzzleState.deep_iterating(start_state, goal_state, 100)
-
     print("start:", start_state)
     print("goal:", goal_state)
+
     print("search path:")
     for index, state in enumerate(iter_search_path):
         print(state, state.level)

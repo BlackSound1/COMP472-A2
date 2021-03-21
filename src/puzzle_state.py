@@ -203,7 +203,7 @@ class PuzzleState():
                                    ])
                 closed_list.append(current_state)
                 for children in state_children:
-                    if children not in open_list and not children not in closed_list:
+                    if children not in open_list and children not in closed_list:
                         open_list.append(children)
         return None, closed_list
 
@@ -237,6 +237,6 @@ class PuzzleState():
                                        ])
                     k += 1
                     for children in state_children:
-                        if children not in open_list and not children not in closed_list:
+                        if children not in open_list and children not in closed_list:
                             open_list.append(children)
         return None, closed_list
