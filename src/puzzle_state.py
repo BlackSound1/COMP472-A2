@@ -17,6 +17,9 @@ class PuzzleState:
     def __eq__(self, other_state):
         return self.state == other_state.state
 
+    def __hash__(self):
+        return hash(('state', list(self.state)))
+
     @property
     def state(self):
         return self._state
@@ -55,7 +58,7 @@ class PuzzleState:
         return None
 
     def is_legal_position(self, position):
-        return position[0] >= 0 and position[0] < self._size and position[1] >= 0 and position[1] < self._size
+        return 0 <= position[0] < self._size and 0 <= position[1] < self._size
 
     def get_next_states(self, start_value):
         position = self.get_position(start_value)
@@ -101,18 +104,15 @@ class PuzzleState:
             for val_index, val in enumerate(row):
                 if state_tuple[row_index][val_index] != goal_state_tuple[row_index][val_index]:
                     distance += 1
-
         return distance
 
     @staticmethod
     def manhattan_distance(state, goal_state):
         distance = 0
-
         for value, position in state.positions.items():
             row_distance = abs(position[0] - goal_state.get_position(value)[0])
             col_distance = abs(position[1] - goal_state.get_position(value)[1])
             distance += row_distance + col_distance
-
         return distance
 
     @staticmethod
@@ -137,7 +137,6 @@ class PuzzleState:
                             sum += 1
                         if value == current:
                             is_right = True
-
         return sum
 
     @staticmethod
@@ -183,3 +182,40 @@ class PuzzleState:
         path_list.reverse()
 
         return path_list
+
+    @staticmethod
+    def depth_first_search(start, goal, max_iter=-1):
+        open_list = []
+        closed_list = []
+        open_list.append(start)
+
+        while open_list:
+            current_state = open_list.pop()
+            closed_list.append(current_state)
+            if current_state == goal:
+                solution_path = [current_state]
+                parent = current_state._parent
+                while parent:
+                    solution_path.append(parent)
+                    parent = parent._parent
+                solution_path.reverse()
+                return solution_path, closed_list
+            else:
+                if max_iter == -1 or current_state._level < max_iter:
+                    state_children = ([current_state.get_next_states(i)[j]
+                                       for i in range(1, (start.size ** 2) + 1)
+                                       for j in range(len(current_state.get_next_states(i)))
+                                       ])
+                    for children in state_children:
+                        if children not in open_list and children not in closed_list:
+                            open_list.append(children)
+        return None, closed_list
+
+    @staticmethod
+    def iterative_deepening(start, goal, max_depth):
+        search_path = []
+        for i in range(max_depth + 1):
+            solution_path, search_path = PuzzleState.depth_first_search(start, goal, i)
+            if solution_path:
+                return solution_path, search_path
+        return None, search_path

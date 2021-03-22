@@ -4,7 +4,7 @@ import re
 
 
 def create_random_puzzle(size):
-    random_list = list(range(1, size*size+1))
+    random_list = list(range(1, size ** 2 + 1))
     shuffle(random_list)
     return PuzzleState([random_list[x:x + size] for x in range(0, len(random_list), size)], 0)
 
@@ -77,3 +77,12 @@ def read_state(state: str):
         list_to_return.append(tup)
 
     return tuple(list_to_return)
+
+
+def print_solution_path(solution_path):
+    if solution_path:
+        for index, state in enumerate(solution_path):
+            print(state, state.level)
+    else:
+        print("no solution")
+    print()
