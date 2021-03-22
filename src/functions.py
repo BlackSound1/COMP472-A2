@@ -78,15 +78,11 @@ def read_state(state: str):
 
     return tuple(list_to_return)
 
-def print_solution_path(puzzle_state):
-    if puzzle_state:
-        parent_state = puzzle_state.parent
-        solution_path = [puzzle_state]
-        while parent_state:
-            solution_path.append(parent_state)
-            parent_state = parent_state.parent
-        solution_path.reverse()
+
+def print_solution_path(solution_path):
+    if solution_path:
         for index, state in enumerate(solution_path):
             print(state, state.level)
     else:
         print("no solution")
+    print()

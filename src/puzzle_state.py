@@ -1,16 +1,14 @@
 from copy import deepcopy
 
 
-class PuzzleState():
+class PuzzleState:
     """Represents a puzzle state"""
-
 
     def __init__(self, state, level=0, parent=None):
         self.state = state
         self._size = len(state)
         self._parent = parent
         self._level = level
-        self.parent = parent
         self._set_positions()
 
     def __str__(self):
@@ -60,7 +58,7 @@ class PuzzleState():
         return None
 
     def is_legal_position(self, position):
-        return position[0] >= 0 and position[0] < self._size and position[1] >= 0 and position[1] < self._size
+        return 0 <= position[0] < self._size and 0 <= position[1] < self._size
 
     def get_next_states(self, start_value):
         position = self.get_position(start_value)
@@ -186,57 +184,38 @@ class PuzzleState():
         return path_list
 
     @staticmethod
-    def depth_first_search(start, goal):
+    def depth_first_search(start, goal, max_iter=-1):
         open_list = []
         closed_list = []
         open_list.append(start)
 
         while open_list:
             current_state = open_list.pop()
+            closed_list.append(current_state)
             if current_state == goal:
-                closed_list.append(current_state)
-                return current_state, closed_list
+                solution_path = [current_state]
+                parent = current_state._parent
+                while parent:
+                    solution_path.append(parent)
+                    parent = parent._parent
+                solution_path.reverse()
+                return solution_path, closed_list
             else:
-                state_children = ([current_state.get_next_states(i)[j]
-                                   for i in range(1, (start.size ** 2) + 1)
-                                   for j in range(len(current_state.get_next_states(i)))
-                                   ])
-                closed_list.append(current_state)
-                for children in state_children:
-                    if children not in open_list and children not in closed_list:
-                        open_list.append(children)
-        return None, closed_list
-
-    @staticmethod
-    def deep_iterating(start, goal, max_depth):
-        closed_list = []
-        for i in range(max_depth):
-            result, closed_list = PuzzleState.dfs_limited(start, goal, i)
-            if result and result == goal:
-                return result, closed_list
-        return None, closed_list
-
-    @staticmethod
-    def dfs_limited(start, goal, max_iter):
-        open_list = []
-        closed_list = []
-        open_list.append(start)
-        k = 1
-        while open_list:
-            current_state = open_list.pop()
-
-            if current_state == goal:
-                closed_list.append(current_state)
-                return current_state, closed_list
-            else:
-                closed_list.append(current_state)
-                if k <= max_iter:
+                if max_iter == -1 or current_state._level < max_iter:
                     state_children = ([current_state.get_next_states(i)[j]
                                        for i in range(1, (start.size ** 2) + 1)
                                        for j in range(len(current_state.get_next_states(i)))
                                        ])
-                    k += 1
                     for children in state_children:
                         if children not in open_list and children not in closed_list:
                             open_list.append(children)
         return None, closed_list
+
+    @staticmethod
+    def iterative_deepening(start, goal, max_depth):
+        search_path = []
+        for i in range(max_depth + 1):
+            solution_path, search_path = PuzzleState.depth_first_search(start, goal, i)
+            if solution_path:
+                return solution_path, search_path
+        return None, search_path

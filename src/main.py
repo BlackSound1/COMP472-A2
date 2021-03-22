@@ -3,7 +3,7 @@ from functions import *
 
 
 def main():
-    create_20_random_puzzles()
+    create_20_random_puzzles(2)
 
     goal_state = read_state(get_goal_state())
 
@@ -11,7 +11,7 @@ def main():
 
     test_Astar_on_20_puzzles(goal_state, puzzles)
     test_dfs_on_20_puzzles(goal_state, puzzles)
-    test_iter_deepening_on_20_puzzles(goal_state, puzzles)
+    test_iter_deepening_on_20_puzzles(goal_state, puzzles, 100)
 
     # Tests
     # state = PuzzleState(((1, 2, 3), (4, 5, 6), (7, 8, 9)))
@@ -80,15 +80,15 @@ def test_dfs_on_20_puzzles(goal, puzzles):
         print("start:", start_state)
         print("goal:", goal_state)
 
-        dfs_result, dfs_search_path = PuzzleState.depth_first_search(start_state, goal_state)
+        dfs_solution_path, dfs_search_path = PuzzleState.depth_first_search(start_state, goal_state)
         print("search path:")
         for index, state in enumerate(dfs_search_path):
             print(state, state.level)
         print("solution path:")
-        print_solution_path(dfs_result)
+        print_solution_path(dfs_solution_path)
 
 
-def test_iter_deepening_on_20_puzzles(goal, puzzles):
+def test_iter_deepening_on_20_puzzles(goal, puzzles, max_depth):
     print("------------")
     print("ITERATIVE DEEPENING ALGORITHM")
     print("------------")
@@ -103,12 +103,12 @@ def test_iter_deepening_on_20_puzzles(goal, puzzles):
         print("start:", start_state)
         print("goal:", goal_state)
 
-        iter_result, iter_search_path = PuzzleState.deep_iterating(start_state, goal_state, 100)
+        iter_solution_path, iter_search_path = PuzzleState.iterative_deepening(start_state, goal_state, max_depth)
         print("search path:")
         for index, state in enumerate(iter_search_path):
             print(state, state.level)
         print("solution path:")
-        print_solution_path(iter_result)
+        print_solution_path(iter_solution_path)
 
 
 if __name__ == '__main__':
