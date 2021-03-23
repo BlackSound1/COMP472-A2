@@ -47,7 +47,8 @@ class PuzzleState:
         return self._f_value
 
     def set_f_value(self, heuristic_func, goal_state):
-        self._f_value = 2 * heuristic_func(self, goal_state) + self.level
+        h_value = heuristic_func(self, goal_state)
+        self._f_value = (h_value + self.level, h_value)
 
     def get_position(self, value):
         return self._positions.get(value)
