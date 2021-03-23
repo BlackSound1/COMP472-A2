@@ -1,4 +1,3 @@
-from puzzle_state import *
 from functions import *
 
 
@@ -7,7 +6,7 @@ def main():
 
     goal_state = read_state(get_goal_state())
 
-    puzzles = get_all_puzzles()
+    puzzles = [read_state(x) for x in get_all_puzzles()]
 
     test_Astar_on_20_puzzles(goal_state, puzzles)
     test_dfs_on_20_puzzles(goal_state, puzzles)
@@ -49,7 +48,7 @@ def test_Astar_on_20_puzzles(goal, puzzles):
     for idx, puzzle in enumerate(puzzles, 0):
         print("\nPuzzle " + str(idx + 1) + ":\n")
         # Test A* using Manhattan distance as heuristic
-        start = read_state(puzzle)
+        start = puzzle
 
         start_state = PuzzleState(start, 0)
         goal_state = PuzzleState(goal, 0)
@@ -66,14 +65,14 @@ def test_Astar_on_20_puzzles(goal, puzzles):
 
 
 def test_dfs_on_20_puzzles(goal, puzzles):
-    print("------------")
+    print("----------------------------")
     print("DEPTH-FIRST SEARCH ALGORITHM")
-    print("------------")
+    print("----------------------------")
 
     for idx, puzzle in enumerate(puzzles, 0):
         print("\nPuzzle " + str(idx + 1) + ":\n")
         # Depth-First Search
-        start = read_state(puzzle)
+        start = puzzle
 
         start_state = PuzzleState(start, 0)
         goal_state = PuzzleState(goal, 0)
@@ -89,14 +88,14 @@ def test_dfs_on_20_puzzles(goal, puzzles):
 
 
 def test_iter_deepening_on_20_puzzles(goal, puzzles, max_depth):
-    print("------------")
+    print("-----------------------------")
     print("ITERATIVE DEEPENING ALGORITHM")
-    print("------------")
+    print("-----------------------------")
 
     for idx, puzzle in enumerate(puzzles, 0):
         print("\nPuzzle " + str(idx + 1) + ":\n")
         # Iterative Deepening
-        start = read_state(puzzle)
+        start = puzzle
 
         start_state = PuzzleState(start, 0)
         goal_state = PuzzleState(goal, 0)
