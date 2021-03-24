@@ -9,9 +9,9 @@ def main():
 
     puzzles = [read_state(x) for x in get_all_puzzles()]
 
-    test_Astar_on_20_puzzles(goal_state, puzzles)
+    # test_Astar_on_20_puzzles(goal_state, puzzles)
     test_dfs_on_20_puzzles(goal_state, puzzles)
-    test_iter_deepening_on_20_puzzles(goal_state, puzzles, 100)
+    # test_iter_deepening_on_20_puzzles(goal_state, puzzles, 100)
 
     # testing()
 
@@ -61,11 +61,14 @@ def test_dfs_on_20_puzzles(goal, puzzles):
         
         output_to_files("DFS", idx, dfs_search_path, dfs_solution_path)
 
-        print("search path:")
-        for index, state in enumerate(dfs_search_path):
-            print(state, state.level)
-        print("solution path:")
-        print_solution_path(dfs_solution_path)
+        if dfs_search_path is None and dfs_solution_path is None:
+            print("no solution")
+        else:
+            print("search path:")
+            for index, state in enumerate(dfs_search_path):
+                print(state, state.level)
+            print("solution path:")
+            print_solution_path(dfs_solution_path)
 
 
 def test_iter_deepening_on_20_puzzles(goal, puzzles, max_depth):

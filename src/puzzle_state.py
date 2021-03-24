@@ -1,5 +1,5 @@
 from copy import deepcopy
-
+import time
 
 class PuzzleState:
     """Represents a puzzle state"""
@@ -190,7 +190,13 @@ class PuzzleState:
         closed_list = []
         open_list.append(start)
 
+        start_time = time.time()
+
         while open_list:
+            elapsed = time.time() - start_time
+            if elapsed > 60.0:
+                return None, None
+
             current_state = open_list.pop()
             closed_list.append(current_state)
             if current_state == goal:

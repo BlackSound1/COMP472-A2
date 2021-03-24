@@ -135,15 +135,21 @@ def output_to_files(puzzle_type: str, puzzle_number: int, search_path: str, solu
 def write_to_solution_file(solution_file, solution_path):
     with open(solution_file, 'wt') as file:
         file.write('Solution Path:\n')
-        for index, state in enumerate(solution_path):
-            file.write('State: ' + str(state) + ' Level: ' + str(state.level) + '\n')
+        if solution_path is None:
+            file.write("no solution")
+        else:
+            for index, state in enumerate(solution_path):
+                file.write('State: ' + str(state) + ' Level: ' + str(state.level) + '\n')
 
 
 def write_to_search_file(search_file, search_path):
     with open(search_file, 'wt') as file:
         file.write("Search Path:\n")
-        for index, state in enumerate(search_path):
-            file.write("State: " + str(state) + ' Level: ' + str(state.level) + '\n')
+        if search_path is None:
+            file.write("no solution")
+        else:
+            for index, state in enumerate(search_path):
+                file.write("State: " + str(state) + ' Level: ' + str(state.level) + '\n')
 
 
 def get_search_and_solution_directories(directory, heuristic):
