@@ -148,8 +148,15 @@ class PuzzleState:
         closed_list = []
         highest_value = goal_state.size**2-1
 
+        start_time = time.time()
+        elapsed = 0.0
+
         while PuzzleState.hamming_distance(current_state, goal_state) != 0 and len(open_list) != 0:
+            elapsed = time.time() - start_time
             current_state = open_list[0]
+
+            if elapsed > 60.0:
+                return None, None, elapsed
 
             if current_state in closed_list:
                 del open_list[0]
@@ -167,9 +174,9 @@ class PuzzleState:
             open_list.sort(key=lambda x: x.get_f_value())
 
         if len(open_list) == 0:
-            return [], closed_list
+            return [], closed_list, elapsed
         elif len(open_list) == 1:
-            return open_list, closed_list
+            return open_list, closed_list, elapsed
 
         # Backtrack last state's ancestor to get path
         reversed_search_list = list(reversed(closed_list))
@@ -182,7 +189,7 @@ class PuzzleState:
             parent = parent._parent
         path_list.reverse()
 
-        return path_list, closed_list
+        return path_list, closed_list, elapsed
 
     @staticmethod
     def depth_first_search(start, goal, max_iter=-1):
@@ -191,11 +198,11 @@ class PuzzleState:
         open_list.append(start)
 
         start_time = time.time()
-
+        elapsed = 0.0
         while open_list:
             elapsed = time.time() - start_time
             if elapsed > 60.0:
-                return None, None
+                return None, None, elapsed
 
             current_state = open_list.pop()
             closed_list.append(current_state)
@@ -206,7 +213,7 @@ class PuzzleState:
                     solution_path.append(parent)
                     parent = parent._parent
                 solution_path.reverse()
-                return solution_path, closed_list
+                return solution_path, closed_list, elapsed
             else:
                 if max_iter == -1 or current_state._level < max_iter:
                     state_children = ([current_state.get_next_states(i)[j]
@@ -216,13 +223,21 @@ class PuzzleState:
                     for children in state_children:
                         if children not in open_list and children not in closed_list:
                             open_list.append(children)
-        return None, closed_list
+        return None, closed_list, elapsed
 
     @staticmethod
     def iterative_deepening(start, goal, max_depth):
         search_path = []
+        start_time = time.time()
+        elapsed = 0.0
+
         for i in range(max_depth + 1):
-            solution_path, search_path = PuzzleState.depth_first_search(start, goal, i)
+            # time.sleep(0.1)  # Demonstrates that Iterative Deepening really is just fast and doesn't take 0.0 seconds
+            elapsed = time.time() - start_time
+            if elapsed > 60.0:
+                return None, None, elapsed
+
+            solution_path, search_path, _ = PuzzleState.depth_first_search(start, goal, i)
             if solution_path:
-                return solution_path, search_path
-        return None, search_path
+                return solution_path, search_path, elapsed
+        return None, search_path, elapsed

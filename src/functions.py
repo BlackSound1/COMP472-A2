@@ -118,7 +118,7 @@ def testing():
             print(state, state.level)
 
 
-def output_to_files(puzzle_type: str, puzzle_number: int, search_path: str, solution_path: str, heuristic=None):
+def output_to_files(puzzle_type: str, puzzle_number: int, search_path: str, solution_path: str, elapsed, heuristic=None):
     directory = f'../output/{puzzle_type}/{puzzle_type}_Puzzle_{puzzle_number}'
 
     check_or_create_directory(directory)
@@ -126,30 +126,32 @@ def output_to_files(puzzle_type: str, puzzle_number: int, search_path: str, solu
     search_file, solution_file = get_search_and_solution_directories(directory, heuristic)
 
     # Write Search File
-    write_to_search_file(search_file, search_path)
+    write_to_search_file(search_file, search_path, elapsed)
 
     # Write Solution File
-    write_to_solution_file(solution_file, solution_path)
+    write_to_solution_file(solution_file, solution_path, elapsed)
 
 
-def write_to_solution_file(solution_file, solution_path):
+def write_to_solution_file(solution_file, solution_path, elapsed):
     with open(solution_file, 'wt') as file:
         file.write('Solution Path:\n')
-        if solution_path is None:
+        if elapsed > 60.0:
             file.write("no solution")
         else:
             for index, state in enumerate(solution_path):
                 file.write('State: ' + str(state) + ' Level: ' + str(state.level) + '\n')
+            file.write("Time taken: " + str(elapsed))
 
 
-def write_to_search_file(search_file, search_path):
+def write_to_search_file(search_file, search_path, elapsed):
     with open(search_file, 'wt') as file:
         file.write("Search Path:\n")
-        if search_path is None:
+        if elapsed > 60.0:
             file.write("no solution")
         else:
             for index, state in enumerate(search_path):
                 file.write("State: " + str(state) + ' Level: ' + str(state.level) + '\n')
+            file.write("Time taken: " + str(elapsed))
 
 
 def get_search_and_solution_directories(directory, heuristic):
