@@ -21,8 +21,8 @@ def test_Astar_on_20_puzzles(goal, puzzles):
     print("A* ALGORITHM")
     print("------------")
 
-    for idx, puzzle in enumerate(puzzles, 0):
-        print("\nPuzzle " + str(idx + 1) + ":\n")
+    for idx, puzzle in enumerate(puzzles, 1):
+        print("\nPuzzle " + str(idx) + ":\n")
         # Test A* using all heuristics
         start = puzzle
 
@@ -34,7 +34,7 @@ def test_Astar_on_20_puzzles(goal, puzzles):
 
         for heuristic in heuristics:
             print(heuristic.__name__, "path")
-            search_list, closed_list = PuzzleState.a_star(start_state, goal_state, heuristic)
+            closed_list, search_list = PuzzleState.a_star(start_state, goal_state, heuristic)
 
             output_to_files("A_Star", idx, search_list, closed_list, heuristic=heuristic.__name__)
 
@@ -47,8 +47,8 @@ def test_dfs_on_20_puzzles(goal, puzzles):
     print("DEPTH-FIRST SEARCH ALGORITHM")
     print("----------------------------")
 
-    for idx, puzzle in enumerate(puzzles, 0):
-        print("\nPuzzle " + str(idx + 1) + ":\n")
+    for idx, puzzle in enumerate(puzzles, 1):
+        print("\nPuzzle " + str(idx) + ":\n")
         # Depth-First Search
         start = puzzle
 
@@ -73,8 +73,8 @@ def test_iter_deepening_on_20_puzzles(goal, puzzles, max_depth):
     print("ITERATIVE DEEPENING ALGORITHM")
     print("-----------------------------")
 
-    for idx, puzzle in enumerate(puzzles, 0):
-        print("\nPuzzle " + str(idx + 1) + ":\n")
+    for idx, puzzle in enumerate(puzzles, 1):
+        print("\nPuzzle " + str(idx) + ":\n")
         # Iterative Deepening
         start = puzzle
 

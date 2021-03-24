@@ -119,7 +119,7 @@ def testing():
 
 
 def output_to_files(puzzle_type: str, puzzle_number: int, search_path: str, solution_path: str, heuristic=None):
-    directory = f'../output/{puzzle_type}/{puzzle_type}_Puzzle_{puzzle_number + 1}'
+    directory = f'../output/{puzzle_type}/{puzzle_type}_Puzzle_{puzzle_number}'
 
     check_or_create_directory(directory)
 
@@ -165,4 +165,4 @@ def get_search_and_solution_directories(directory, heuristic):
 
 def check_or_create_directory(directory):
     if not os.path.isdir(directory):
-        os.mkdir(directory)
+        os.makedirs(directory)
