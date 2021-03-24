@@ -21,12 +21,9 @@ def test_Astar_on_20_puzzles(goal, puzzles):
     print("A* ALGORITHM")
     print("------------")
 
-    if not os.path.isdir('../output/A_Star/'):
-        os.mkdir('../output/A_Star/')
-
     for idx, puzzle in enumerate(puzzles, 0):
         print("\nPuzzle " + str(idx + 1) + ":\n")
-        # Test A* using Manhattan distance as heuristic
+        # Test A* using all heuristics
         start = puzzle
 
         start_state = PuzzleState(start, 0)
@@ -49,9 +46,6 @@ def test_dfs_on_20_puzzles(goal, puzzles):
     print("----------------------------")
     print("DEPTH-FIRST SEARCH ALGORITHM")
     print("----------------------------")
-
-    if not os.path.isdir('../output/DFS/'):
-        os.mkdir('../output/DFS/')
 
     for idx, puzzle in enumerate(puzzles, 0):
         print("\nPuzzle " + str(idx + 1) + ":\n")
@@ -78,9 +72,6 @@ def test_iter_deepening_on_20_puzzles(goal, puzzles, max_depth):
     print("-----------------------------")
     print("ITERATIVE DEEPENING ALGORITHM")
     print("-----------------------------")
-
-    if not os.path.isdir('../output/Iter_Deepening/'):
-        os.mkdir('../output/Iter_Deepening/')
 
     for idx, puzzle in enumerate(puzzles, 0):
         print("\nPuzzle " + str(idx + 1) + ":\n")
