@@ -167,9 +167,9 @@ class PuzzleState:
             open_list.sort(key=lambda x: x.get_f_value())
 
         if len(open_list) == 0:
-            return []
+            return [], closed_list
         elif len(open_list) == 1:
-            return open_list
+            return open_list, closed_list
 
         # Backtrack last state's ancestor to get path
         reversed_search_list = list(reversed(closed_list))
@@ -182,7 +182,7 @@ class PuzzleState:
             parent = parent._parent
         path_list.reverse()
 
-        return path_list
+        return path_list, closed_list
 
     @staticmethod
     def depth_first_search(start, goal, max_iter=-1):

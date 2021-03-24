@@ -1,3 +1,4 @@
+
 from functions import *
 
 
@@ -12,38 +13,16 @@ def main():
     test_dfs_on_20_puzzles(goal_state, puzzles)
     test_iter_deepening_on_20_puzzles(goal_state, puzzles, 100)
 
-    # Tests
-    # state = PuzzleState(((1, 2, 3), (4, 5, 6), (7, 8, 9)))
-    # goal = PuzzleState(((2, 1, 3), (9, 6, 4), (7, 8, 5)))
-    # assert PuzzleState.hamming_distance(state, goal) == 6
-    # assert PuzzleState.manhattan_distance(state, goal) == 10
-    # assert PuzzleState.sum_permutation(state, goal) == 10
-    #
-    # state = PuzzleState(((1, 2), (3, 4)))
-    # goal = PuzzleState(((4, 3), (1, 2)))
-    # assert PuzzleState.hamming_distance(state, goal) == 4
-    # assert PuzzleState.manhattan_distance(state, goal) == 6
-    # assert PuzzleState.sum_permutation(state, goal) == 5
-    #
-    # # Test A* using all heuristics
-    # start_state = create_random_puzzle(3)
-    # goal_state = create_random_puzzle(3)
-    # heuristics = [PuzzleState.sum_permutation, PuzzleState.hamming_distance, PuzzleState.manhattan_distance]
-    # print("start:", start_state)
-    # print("goal:", goal_state)
-    #
-    # for heuristic in heuristics:
-    #     print(heuristic.__name__, "path")
-    #     search_list = PuzzleState.a_star(start_state, goal_state, heuristic)
-    #
-    #     for index, state in enumerate(search_list):
-    #         print(state, state.level)
+    # testing()
 
 
 def test_Astar_on_20_puzzles(goal, puzzles):
     print("------------")
     print("A* ALGORITHM")
     print("------------")
+
+    if not os.path.isdir('../output/A_Star/'):
+        os.mkdir('../output/A_Star/')
 
     for idx, puzzle in enumerate(puzzles, 0):
         print("\nPuzzle " + str(idx + 1) + ":\n")
@@ -58,7 +37,9 @@ def test_Astar_on_20_puzzles(goal, puzzles):
 
         for heuristic in heuristics:
             print(heuristic.__name__, "path")
-            search_list = PuzzleState.a_star(start_state, goal_state, heuristic)
+            search_list, closed_list = PuzzleState.a_star(start_state, goal_state, heuristic)
+
+            output_to_files("A_Star", idx, search_list, closed_list, heuristic=heuristic.__name__)
 
             for index, state in enumerate(search_list):
                 print(state, state.level)
@@ -68,6 +49,9 @@ def test_dfs_on_20_puzzles(goal, puzzles):
     print("----------------------------")
     print("DEPTH-FIRST SEARCH ALGORITHM")
     print("----------------------------")
+
+    if not os.path.isdir('../output/DFS/'):
+        os.mkdir('../output/DFS/')
 
     for idx, puzzle in enumerate(puzzles, 0):
         print("\nPuzzle " + str(idx + 1) + ":\n")
@@ -80,6 +64,9 @@ def test_dfs_on_20_puzzles(goal, puzzles):
         print("goal:", goal_state)
 
         dfs_solution_path, dfs_search_path = PuzzleState.depth_first_search(start_state, goal_state)
+        
+        output_to_files("DFS", idx, dfs_search_path, dfs_solution_path)
+
         print("search path:")
         for index, state in enumerate(dfs_search_path):
             print(state, state.level)
@@ -92,6 +79,9 @@ def test_iter_deepening_on_20_puzzles(goal, puzzles, max_depth):
     print("ITERATIVE DEEPENING ALGORITHM")
     print("-----------------------------")
 
+    if not os.path.isdir('../output/Iter_Deepening/'):
+        os.mkdir('../output/Iter_Deepening/')
+
     for idx, puzzle in enumerate(puzzles, 0):
         print("\nPuzzle " + str(idx + 1) + ":\n")
         # Iterative Deepening
@@ -103,6 +93,9 @@ def test_iter_deepening_on_20_puzzles(goal, puzzles, max_depth):
         print("goal:", goal_state)
 
         iter_solution_path, iter_search_path = PuzzleState.iterative_deepening(start_state, goal_state, max_depth)
+
+        output_to_files("Iter_Deepening", idx, iter_search_path, iter_solution_path)
+
         print("search path:")
         for index, state in enumerate(iter_search_path):
             print(state, state.level)
