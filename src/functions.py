@@ -1,6 +1,7 @@
 from puzzle_state import PuzzleState
 from random import shuffle
 import re
+import os
 
 
 def create_random_puzzle(size):
@@ -86,3 +87,90 @@ def print_solution_path(solution_path):
     else:
         print("no solution")
     print()
+
+
+def testing():
+    # Tests
+    state = PuzzleState(((1, 2, 3), (4, 5, 6), (7, 8, 9)))
+    goal = PuzzleState(((2, 1, 3), (9, 6, 4), (7, 8, 5)))
+    assert PuzzleState.hamming_distance(state, goal) == 6
+    assert PuzzleState.manhattan_distance(state, goal) == 10
+    assert PuzzleState.sum_permutation(state, goal) == 10
+
+    state = PuzzleState(((1, 2), (3, 4)))
+    goal = PuzzleState(((4, 3), (1, 2)))
+    assert PuzzleState.hamming_distance(state, goal) == 4
+    assert PuzzleState.manhattan_distance(state, goal) == 6
+    assert PuzzleState.sum_permutation(state, goal) == 5
+
+    # Test A* using all heuristics
+    start_state = create_random_puzzle(3)
+    goal_state = create_random_puzzle(3)
+    heuristics = [PuzzleState.sum_permutation, PuzzleState.hamming_distance, PuzzleState.manhattan_distance]
+    print("start:", start_state)
+    print("goal:", goal_state)
+
+    for heuristic in heuristics:
+        print(heuristic.__name__, "path")
+        search_list = PuzzleState.a_star(start_state, goal_state, heuristic)
+
+        for index, state in enumerate(search_list):
+            print(state, state.level)
+
+
+def output_to_files(puzzle_type: str, puzzle_number: int, search_path: str, solution_path: str, elapsed, heuristic=None):
+    directory = f'../output/{puzzle_type}/{puzzle_type}_Puzzle_{puzzle_number}'
+
+    check_or_create_directory(directory)
+
+    search_file, solution_file = get_search_and_solution_directories(directory, heuristic)
+
+    # Write Search File
+    write_to_search_file(search_file, search_path, elapsed)
+
+    # Write Solution File
+    write_to_solution_file(solution_file, solution_path, elapsed)
+
+
+def write_to_solution_file(solution_file, solution_path, elapsed):
+    with open(solution_file, 'wt') as file:
+        file.write('Solution Path:\n')
+        if elapsed > 60.0:
+            file.write("no solution")
+        else:
+            for index, state in enumerate(solution_path):
+                file.write('State: ' + str(state) + ' Level: ' + str(state.level) + '\n')
+            file.write("Time taken: " + str(elapsed))
+
+
+def write_to_search_file(search_file, search_path, elapsed):
+    with open(search_file, 'wt') as file:
+        file.write("Search Path:\n")
+        if elapsed > 60.0:
+            file.write("no solution")
+        else:
+            for index, state in enumerate(search_path):
+                file.write("State: " + str(state) + ' Level: ' + str(state.level) + '\n')
+            file.write("Time taken: " + str(elapsed))
+
+
+def get_search_and_solution_directories(directory, heuristic):
+    if heuristic is not None:
+        if heuristic == "hamming_distance":
+            hamming_directory = directory + '/Hamming_Distance'
+            check_or_create_directory(hamming_directory)
+            return hamming_directory + '/Search_Path.txt', hamming_directory + '/Solution_Path.txt'
+        elif heuristic == "manhattan_distance":
+            manhattan_directory = directory + '/Manhattan_Distance'
+            check_or_create_directory(manhattan_directory)
+            return manhattan_directory + '/Search_Path.txt', manhattan_directory + '/Solution_Path.txt'
+        elif heuristic == "sum_permutation":
+            sum_directory = directory + '/Sum_Permutation'
+            check_or_create_directory(sum_directory)
+            return sum_directory + '/Search_Path.txt', sum_directory + '/Solution_Path.txt'
+    return directory + '/Search_Path.txt', directory + '/Solution_Path.txt'
+
+
+def check_or_create_directory(directory):
+    if not os.path.isdir(directory):
+        os.makedirs(directory)
