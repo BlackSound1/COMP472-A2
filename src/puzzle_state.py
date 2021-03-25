@@ -151,6 +151,14 @@ class PuzzleState:
         start_time = time.time()
         elapsed = 0.0
 
+        def compare_and_replace_state_in_list(state, state_list):
+            old_state_index = state_list.index(state)
+            old_state = state_list[old_state_index]
+            old_state_f_value = old_state.get_f_value()
+            state_f_value = state.get_f_value()
+            if old_state_f_value > state_f_value:
+                state_list[old_state_index] = state
+
         while PuzzleState.hamming_distance(current_state, goal_state) != 0 and len(open_list) != 0:
             elapsed = time.time() - start_time
             current_state = open_list[0]
@@ -159,16 +167,18 @@ class PuzzleState:
                 return None, None, elapsed
 
             if current_state in closed_list:
+                compare_and_replace_state_in_list(current_state, closed_list)
                 del open_list[0]
-                current_state = open_list[0]
                 continue
 
             for start in range(1, highest_value):
                 next_best_states = current_state.get_next_states(start)
                 for state in next_best_states:
+                    state.set_f_value(heuristic_func, goal_state)
                     if state not in open_list:
-                        state.set_f_value(heuristic_func, goal_state)
                         open_list.append(state)
+                    else:
+                        compare_and_replace_state_in_list(state, open_list)
 
             closed_list.append(current_state)
             open_list.sort(key=lambda x: x.get_f_value())
@@ -179,8 +189,7 @@ class PuzzleState:
             return open_list, closed_list, elapsed
 
         # Backtrack last state's ancestor to get path
-        reversed_search_list = list(reversed(closed_list))
-        last_state = reversed_search_list[0]
+        last_state = closed_list[-1]
         path_list = [last_state]
         
         parent = last_state._parent
