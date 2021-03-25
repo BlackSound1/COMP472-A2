@@ -97,6 +97,7 @@ class PuzzleState:
 
     @staticmethod
     def hamming_distance(state, goal_state):
+        PuzzleState.hamming_distance.monotonic = False
         distance = 0
         state_tuple = state.state
         goal_state_tuple = goal_state.state
@@ -109,6 +110,7 @@ class PuzzleState:
 
     @staticmethod
     def manhattan_distance(state, goal_state):
+        PuzzleState.manhattan_distance.monotonic = True
         distance = 0
         for value, position in state.positions.items():
             row_distance = abs(position[0] - goal_state.get_position(value)[0])
@@ -118,6 +120,7 @@ class PuzzleState:
 
     @staticmethod
     def sum_permutation(state, goal_state):
+        PuzzleState.sum_permutation.monotonic = False
         sum = 0
 
         for row in goal_state.state:
@@ -167,7 +170,8 @@ class PuzzleState:
                 return None, None, elapsed
 
             if current_state in closed_list:
-                compare_and_replace_state_in_list(current_state, closed_list)
+                if hasattr(heuristic_func, 'monotonic') and not heuristic_func.monotonic:
+                    compare_and_replace_state_in_list(current_state, closed_list)
                 del open_list[0]
                 continue
 
