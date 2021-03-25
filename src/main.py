@@ -73,7 +73,7 @@ def test_dfs_on_20_puzzles(goal, puzzles):
                 print(state, state.level)
             print("solution path:")
             print_solution_path(dfs_solution_path)
-            print("Take taken: " + str(elapsed))
+            print("Time taken: " + str(elapsed))
 
 
 def test_iter_deepening_on_20_puzzles(goal, puzzles, max_depth):
@@ -103,7 +103,7 @@ def test_iter_deepening_on_20_puzzles(goal, puzzles, max_depth):
                 print(state, state.level)
             print("solution path:")
             print_solution_path(iter_solution_path)
-            print("Take taken: " + str(elapsed))
+            print("Time taken: " + str(elapsed))
 
 
 if __name__ == '__main__':
