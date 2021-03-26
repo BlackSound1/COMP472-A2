@@ -146,7 +146,7 @@ class PuzzleState:
         current_state.set_f_value(heuristic_func, goal_state)
         open_list = [start_state]
         closed_list = []
-        highest_value = goal_state.size**2-1
+        highest_value = goal_state.size**2 - 1
 
         start_time = time.time()
         elapsed = 0.0
@@ -163,7 +163,7 @@ class PuzzleState:
                 current_state = open_list[0]
                 continue
 
-            for start in range(1, highest_value):
+            for start in range(1, highest_value + 1):
                 next_best_states = current_state.get_next_states(start)
                 for state in next_best_states:
                     if state not in open_list:
