@@ -81,9 +81,9 @@ def test_Astar_on_20_puzzles(goal, puzzles):
             print(f"Total cost of search path: {total_search_cost}")
             total_exec_time = sum(execution_time)
             print(f"Average execution time: {total_exec_time / len(execution_time)}")
-            print(f"Total execution time: {total_exec_time}\n")
+            print(f"Total execution time: {total_exec_time}")
 
-        print(f"Total number of no solution: {nb_no_solution}")
+        print(f"Total number of no solution: {nb_no_solution}\n")
 
 
 def test_dfs_on_20_puzzles(goal, puzzles):
@@ -144,9 +144,9 @@ def test_dfs_on_20_puzzles(goal, puzzles):
 
         total_exec_time = sum(execution_time)
         print(f"Average execution time: {total_exec_time / len(execution_time)}")
-        print(f"Total execution time: {total_exec_time}\n")
+        print(f"Total execution time: {total_exec_time}")
 
-    print(f"Total number of no solution: {nb_no_solution}")
+    print(f"Total number of no solution: {nb_no_solution}\n")
 
 
 def test_iter_deepening_on_20_puzzles(goal, puzzles, max_depth):
@@ -207,9 +207,9 @@ def test_iter_deepening_on_20_puzzles(goal, puzzles, max_depth):
 
         total_exec_time = sum(execution_time)
         print(f"Average execution time: {total_exec_time / len(execution_time)}")
-        print(f"Total execution time: {total_exec_time}\n")
+        print(f"Total execution time: {total_exec_time}")
 
-    print(f"Total number of no solution: {nb_no_solution}")
+    print(f"Total number of no solution: {nb_no_solution}\n")
 
 
 if __name__ == '__main__':
