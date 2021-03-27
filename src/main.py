@@ -66,7 +66,7 @@ def test_Astar_on_20_puzzles(goal, puzzles):
                 # print("Time taken: " + str(elapsed))
 
         print(f"\nA* {heuristic.__name__} data")
-        if length_solution is not None:
+        if length_solution:
             total_length_sol = sum(length_solution)
             print(f"Average length of solution path: {total_length_sol / len(length_solution)}")
             print(f"Total length of solution path: {total_length_sol}")
@@ -126,7 +126,7 @@ def test_dfs_on_20_puzzles(goal, puzzles):
             # print("Time taken: " + str(elapsed))
 
     print(f"DFS data")
-    if length_solution is not None:
+    if length_solution:
         total_length_sol = sum(length_solution)
         total_length_search = sum(length_search)
 
@@ -189,7 +189,7 @@ def test_iter_deepening_on_20_puzzles(goal, puzzles, max_depth):
             # print("Time taken: " + str(elapsed))
 
     print(f"Iterative Deepening data")
-    if length_solution is not None:
+    if length_solution:
         total_length_sol = sum(length_solution)
         total_length_search = sum(length_search)
 
