@@ -79,11 +79,11 @@ def test_Astar_on_20_puzzles(goal, puzzles):
             total_search_cost = sum(search_cost)
             print(f"Average cost of search path: {total_search_cost / len(search_cost)}")
             print(f"Total cost of search path: {total_search_cost}")
+            total_exec_time = sum(execution_time)
+            print(f"Average execution time: {total_exec_time / len(execution_time)}")
+            print(f"Total execution time: {total_exec_time}\n")
 
         print(f"Total number of no solution: {nb_no_solution}")
-        total_exec_time = sum(execution_time)
-        print(f"Average execution time: {total_exec_time / len(execution_time)}")
-        print(f"Total execution time: {total_exec_time}\n")
 
 
 def test_dfs_on_20_puzzles(goal, puzzles):
@@ -142,11 +142,11 @@ def test_dfs_on_20_puzzles(goal, puzzles):
         print(f"Average cost of search path: {total_length_search / len(length_search)}")
         print(f"Total cost of search path: {total_length_search}")
 
-    print(f"Total number of no solution: {nb_no_solution}")
+        total_exec_time = sum(execution_time)
+        print(f"Average execution time: {total_exec_time / len(execution_time)}")
+        print(f"Total execution time: {total_exec_time}\n")
 
-    total_exec_time = sum(execution_time)
-    print(f"Average execution time: {total_exec_time / len(execution_time)}")
-    print(f"Total execution time: {total_exec_time}\n")
+    print(f"Total number of no solution: {nb_no_solution}")
 
 
 def test_iter_deepening_on_20_puzzles(goal, puzzles, max_depth):
@@ -205,11 +205,11 @@ def test_iter_deepening_on_20_puzzles(goal, puzzles, max_depth):
         print(f"Average cost of search path: {total_length_search / len(length_search)}")
         print(f"Total cost of search path: {total_length_search}")
 
-    print(f"Total number of no solution: {nb_no_solution}")
+        total_exec_time = sum(execution_time)
+        print(f"Average execution time: {total_exec_time / len(execution_time)}")
+        print(f"Total execution time: {total_exec_time}\n")
 
-    total_exec_time = sum(execution_time)
-    print(f"Average execution time: {total_exec_time / len(execution_time)}")
-    print(f"Total execution time: {total_exec_time}\n")
+    print(f"Total number of no solution: {nb_no_solution}")
 
 
 if __name__ == '__main__':
