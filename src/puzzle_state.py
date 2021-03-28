@@ -116,7 +116,7 @@ class PuzzleState:
             row_distance = abs(position[0] - goal_state.get_position(value)[0])
             col_distance = abs(position[1] - goal_state.get_position(value)[1])
             distance += row_distance + col_distance
-        return distance
+        return distance / 2
 
     @staticmethod
     def sum_permutation(state, goal_state):
