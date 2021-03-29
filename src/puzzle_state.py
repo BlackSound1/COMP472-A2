@@ -116,7 +116,7 @@ class PuzzleState:
             row_distance = abs(position[0] - goal_state.get_position(value)[0])
             col_distance = abs(position[1] - goal_state.get_position(value)[1])
             distance += row_distance + col_distance
-        return distance
+        return distance / 2
 
     @staticmethod
     def sum_permutation(state, goal_state):
@@ -155,12 +155,18 @@ class PuzzleState:
         elapsed = 0.0
 
         def compare_and_replace_state_in_list(state, state_list):
+            if has_smaller_f_in_list(state, state_list):
+                old_state_index = state_list.index(state)
+                state_list[old_state_index] = state
+
+        def has_smaller_f_in_list(state, state_list):
             old_state_index = state_list.index(state)
             old_state = state_list[old_state_index]
             old_state_f_value = old_state.get_f_value()
             state_f_value = state.get_f_value()
             if old_state_f_value > state_f_value:
-                state_list[old_state_index] = state
+                return True
+            return False
 
         while PuzzleState.hamming_distance(current_state, goal_state) != 0 and len(open_list) != 0:
             elapsed = time.time() - start_time
@@ -169,22 +175,22 @@ class PuzzleState:
             if elapsed > 60.0:
                 return None, None, elapsed
 
-            if current_state in closed_list:
-                if hasattr(heuristic_func, 'monotonic') and not heuristic_func.monotonic:
-                    compare_and_replace_state_in_list(current_state, closed_list)
-                del open_list[0]
-                continue
-
             for start in range(1, highest_value + 1):
                 next_best_states = current_state.get_next_states(start)
                 for state in next_best_states:
                     state.set_f_value(heuristic_func, goal_state)
-                    if state not in open_list:
-                        open_list.append(state)
-                    else:
+                    if state in closed_list:
+                        if (hasattr(heuristic_func, 'monotonic') and 
+                                not heuristic_func.monotonic and 
+                                has_smaller_f_in_list(state, closed_list)):
+                            open_list.append(state)
+                    elif state in open_list:
                         compare_and_replace_state_in_list(state, open_list)
+                    else:
+                        open_list.append(state)
 
             closed_list.append(current_state)
+            del open_list[0]
             open_list.sort(key=lambda x: x.get_f_value())
 
         if len(open_list) == 0:
