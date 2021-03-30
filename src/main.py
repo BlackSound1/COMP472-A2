@@ -3,7 +3,7 @@ from functions import *
 
 
 def main():
-    create_20_random_puzzles(2)
+    create_20_random_puzzles()
 
     goal_state = read_state(get_goal_state())
 
