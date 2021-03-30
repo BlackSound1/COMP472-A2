@@ -2,6 +2,7 @@ from copy import deepcopy
 import time
 import heapq
 
+
 class PuzzleState:
     """Represents a puzzle state"""
 
@@ -42,31 +43,66 @@ class PuzzleState:
         return self._positions
 
     @state.setter
-    def state(self, state):
+    def state(self, state: tuple) -> None:
+        """ Directly manipulates the state, because _state is a private variable
+
+        :param state: The state
+        :return: The state as a list
+        """
         state_as_list = []
         for row in state:
             state_as_list.append(list(row))
         self._state = state_as_list
 
-    def get_f_value(self):
+    def get_f_value(self) -> tuple:
+        """ Gets the f value
+
+        :return: The f value
+        """
         return self._f_value
 
-    def set_f_value(self, heuristic_func, goal_state):
+    def set_f_value(self, heuristic_func, goal_state: tuple) -> None:
+        """ Sets the f value based on the given given goal state and the given heuristic function
+
+        :param heuristic_func: The heuristic function to call
+        :param goal_state: The goal state
+        :return: None
+        """
         h_value = heuristic_func(self, goal_state)
         self._f_value = (h_value + self.level, h_value)
 
-    def get_position(self, value):
+    def get_position(self, value: int) -> tuple:
+        """ Gets the position of the given value
+
+        :param value: The value to find the position of
+        :return: The position of the value
+        """
         return self._positions.get(value)
 
-    def get_value(self, position):
+    def get_value(self, position: tuple):
+        """ Gets the value of a given position
+
+        :param position: The position to evaluate
+        :return: The value of the state
+        """
         if self.is_legal_position(position):
             return self.state[position[0]][position[1]]
         return None
 
-    def is_legal_position(self, position):
+    def is_legal_position(self, position: tuple) -> bool:
+        """ Checks whether a given position is valid or not
+
+        :param position: The tuple containing the given position to check
+        :return: True or False
+        """
         return 0 <= position[0] < self._size and 0 <= position[1] < self._size
 
-    def get_next_states(self, start_value):
+    def get_next_states(self, start_value: int) -> list:
+        """ Gets all possible states that can be derived directly from the current state of the puzzle
+
+        :param start_value: THe start value
+        :return: The list of all next states
+        """
         position = self.get_position(start_value)
         if not position:
             return []
@@ -81,7 +117,13 @@ class PuzzleState:
 
         return next_positions
 
-    def _switch_positions(self, start_position, end_position):
+    def _switch_positions(self, start_position: tuple, end_position: tuple):
+        """ Switches 2 tiles
+
+        :param start_position: The first tile position
+        :param end_position: The second tile position
+        :return: A new PuzzleState with the 2 tiles switched
+        """
         start_value = self.get_value(start_position)
         end_value = self.get_value(end_position)
 
@@ -91,7 +133,11 @@ class PuzzleState:
 
         return PuzzleState(new_state, self._level + 1, self)
 
-    def _set_positions(self):
+    def _set_positions(self) -> None:
+        """ Sets the positions of each tile based on the current state
+
+        :return: None
+        """
         positions = {}
         for row_index, row in enumerate(self._state):
             if len(row) != self.size:
@@ -101,7 +147,13 @@ class PuzzleState:
         self._positions = positions
 
     @staticmethod
-    def hamming_distance(state, goal_state):
+    def hamming_distance(state, goal_state) -> int:
+        """ Computes the Hamming distance between a current given state and the goal state
+
+        :param state: The current PuzzleState
+        :param goal_state: The goal state
+        :return: The Hamming distance
+        """
         PuzzleState.hamming_distance.monotonic = False
         distance = 0
         state_tuple = state.state
@@ -114,7 +166,16 @@ class PuzzleState:
         return distance
 
     @staticmethod
-    def manhattan_distance(state, goal_state):
+    def manhattan_distance(state, goal_state) -> float:
+        """ Computes the Manhattan distance between a current given state and the goal state.
+
+        This is a modified version of the typical Manhattan distance which we find to be slightly
+        more admissible for this type of puzzle
+
+        :param state: The current PuzzleState
+        :param goal_state: The goal state
+        :return: The modified Manhattan distance
+        """
         PuzzleState.manhattan_distance.monotonic = True
         distance = 0
         for value, position in state.positions.items():
@@ -124,7 +185,13 @@ class PuzzleState:
         return distance / 2
 
     @staticmethod
-    def sum_permutation(state, goal_state):
+    def sum_permutation(state, goal_state) -> int:
+        """ Computes the sum permutation between a current given state and the goal state.
+
+        :param state: The current PuzzleState
+        :param goal_state: The goal state
+        :return: The sum permutation
+        """
         PuzzleState.sum_permutation.monotonic = False
         sum = 0
 
@@ -149,7 +216,15 @@ class PuzzleState:
         return sum
 
     @staticmethod
-    def a_star(start_state, goal_state, heuristic_func, time_limit=60):
+    def a_star(start_state, goal_state, heuristic_func) -> tuple:
+        """ Performs the A* algorithm.
+
+        :param start_state: The Starting PuzzleState
+        :param goal_state: The goal state
+        :param heuristic_func: The heuristic function to use for the algorithm
+        :return: The open list, the closed list, and the elapsed time of the algorithm, all as a tuple.
+        """
+
         current_state = start_state
         current_state.set_f_value(heuristic_func, goal_state)
         open_list = [start_state]
@@ -166,7 +241,13 @@ class PuzzleState:
                 state_heap[old_state_index] = state
                 heapq.heapify(state_heap)
 
-        def has_smaller_f_in_list(state, state_list):
+        def has_smaller_f_in_list(state, state_list) -> bool:
+            """ Checks if there exists a smaller value for f in the given list
+
+            :param state: The given PuzzleState
+            :param state_list: The list to check against
+            :return: True or False
+            """
             old_state_index = state_list.index(state)
             old_state = state_list[old_state_index]
             old_state_f_value = old_state.get_f_value()
@@ -216,7 +297,14 @@ class PuzzleState:
         return path_list, closed_list, elapsed
 
     @staticmethod
-    def depth_first_search(start, goal, max_iter=-1, time_limit=60):
+    def depth_first_search(start, goal, max_iter: int = -1, time_limit=60) -> tuple:
+        """ Performs the Depth First Search algorithm
+
+        :param start: The starting PuzzleState
+        :param goal: The goal state
+        :param max_iter: the maximum number of iteration to perform. Default is -1.
+        :return: The open list, the closed list, and the elapsed time of the algorithm, all as a tuple.
+        """
         open_list = []
         closed_list = []
         open_list.append(start)
@@ -250,7 +338,14 @@ class PuzzleState:
         return None, closed_list, elapsed
 
     @staticmethod
-    def iterative_deepening(start, goal, max_depth, time_limit=60):
+    def iterative_deepening(start, goal, max_depth: int, time_limit=60) -> tuple:
+        """ Performs the Depth First Search algorithm, this time with iterative deepening
+
+        :param start: The starting PuzzleState
+        :param goal: The goal state
+        :param max_depth: The maximum depth to search to
+        :return: The open list, the closed list, and the elapsed time of the algorithm, all as a tuple.
+        """
         search_path = []
         start_time = time.time()
         elapsed = 0.0
