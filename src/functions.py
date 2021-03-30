@@ -174,3 +174,59 @@ def get_search_and_solution_directories(directory, heuristic):
 def check_or_create_directory(directory):
     if not os.path.isdir(directory):
         os.makedirs(directory)
+
+
+def print_astar_data(heuristic,
+                     length_solution,
+                     length_search,
+                     solution_cost,
+                     search_cost,
+                     execution_time,
+                     nb_no_solution):
+    print(f"\nA* {heuristic.__name__} data")
+    if length_solution:
+        total_length_sol = sum(length_solution)
+        print(f"Average length of solution path: {total_length_sol / len(length_solution)}")
+        print(f"Total length of solution path: {total_length_sol}")
+
+        total_length_search = sum(length_search)
+        print(f"Average length of search path: {total_length_search / len(length_search)}")
+        print(f"Total length of search path: {total_length_search}")
+
+        total_sol_cost = sum(solution_cost)
+        print(f"Average cost of solution path: {total_sol_cost / len(solution_cost)}")
+        print(f"Total cost of solution path: {total_sol_cost}")
+
+        total_search_cost = sum(search_cost)
+        print(f"Average cost of search path: {total_search_cost / len(search_cost)}")
+        print(f"Total cost of search path: {total_search_cost}")
+
+        total_exec_time = sum(execution_time)
+        print(f"Average execution time: {total_exec_time / len(execution_time)}")
+        print(f"Total execution time: {total_exec_time}")
+
+    print(f"Total number of no solution: {nb_no_solution}\n")
+
+
+def print_data(length_solution, length_search, execution_time, nb_no_solution):
+    if length_solution:
+        total_length_sol = sum(length_solution)
+        total_length_search = sum(length_search)
+
+        print(f"Average length of solution path: {total_length_sol / len(length_solution)}")
+        print(f"Total length of solution path: {total_length_sol}")
+
+        print(f"Average length of search path: {total_length_search / len(length_search)}")
+        print(f"Total length of search path: {total_length_search}")
+
+        print(f"Average cost of solution path: {total_length_sol / len(length_solution)}")
+        print(f"Total cost of solution path: {total_length_sol}")
+
+        print(f"Average cost of search path: {total_length_search / len(length_search)}")
+        print(f"Total cost of search path: {total_length_search}")
+
+        total_exec_time = sum(execution_time)
+        print(f"Average execution time: {total_exec_time / len(execution_time)}")
+        print(f"Total execution time: {total_exec_time}")
+
+    print(f"Total number of no solution: {nb_no_solution}\n")
