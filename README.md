@@ -34,3 +34,12 @@ The results of each puzzle (including search path and solution path) are organiz
 of A* by heuristic as well) in the `output` directory. The contents of the `output` directory are ignored using 
 `.gitignore` and are not shown on GitHub. This is because they are many documents that are always changing upon every 
 execution of the code. There is no reason for version control in the case of these files. 
+
+Special Note: This software makes use of the `os.makedirs()` method. According to official Python 3 documentation 
+(found here: https://docs.python.org/3/library/os.html), 
+> `makedirs()` will become confused if the path elements to create include `pardir` (eg. “..” on UNIX systems).
+
+This software does indeed use the `..` character sequence to shorten path names. If this is a problem on your system,
+it is advisable to replace these relative path names with absolute path names.
+Of special importance is the `directory` variable in the `output_to_files()` function definition in `functions.py`,
+as it is this `directory` variable which directly interacts with `os.makedirs()`.

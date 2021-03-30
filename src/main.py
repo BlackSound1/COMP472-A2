@@ -16,7 +16,15 @@ def main():
     # testing()
 
 
-def test_Astar_on_20_puzzles(goal, puzzles):
+def test_Astar_on_20_puzzles(goal: tuple, puzzles: list) -> None:
+    """ Runs the A* algorithm on all puzzles using each heuristic.
+
+    The heuristics we use are: sum permutation, Hamming distance, and a
+    modified version of the Manhattan distance.
+    :param goal: The goal state
+    :param puzzles: All the puzzles being solved
+    :return: None
+    """
     print("------------")
     print("A* ALGORITHM")
     print("------------")
@@ -46,7 +54,13 @@ def test_Astar_on_20_puzzles(goal, puzzles):
                 print("Time taken: " + str(elapsed))
 
 
-def test_dfs_on_20_puzzles(goal, puzzles):
+def test_dfs_on_20_puzzles(goal: tuple, puzzles: list) -> None:
+    """ Runs the DFS algorithm on all puzzles
+
+    :param goal: The goal state
+    :param puzzles: All the puzzles being solved
+    :return: None
+    """
     print("----------------------------")
     print("DEPTH-FIRST SEARCH ALGORITHM")
     print("----------------------------")
@@ -76,7 +90,14 @@ def test_dfs_on_20_puzzles(goal, puzzles):
             print("Time taken: " + str(elapsed))
 
 
-def test_iter_deepening_on_20_puzzles(goal, puzzles, max_depth):
+def test_iter_deepening_on_20_puzzles(goal: tuple, puzzles: list, max_depth: int) -> None:
+    """ Runs the DFS algorithm with iterative deepening on all puzzles
+
+    :param goal: The goal state
+    :param puzzles: All the puzzles being solved
+    :param max_depth: The maximum depth to search to before concluding that there is no solution
+    :return: None
+    """
     print("-----------------------------")
     print("ITERATIVE DEEPENING ALGORITHM")
     print("-----------------------------")
