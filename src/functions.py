@@ -191,7 +191,7 @@ def print_astar_data(heuristic,
 
         total_length_search = sum(length_search)
         print(f"Average length of search path: {total_length_search / len(length_search)}")
-        print(f"Total length of solution path: {total_length_search}")
+        print(f"Total length of search path: {total_length_search}")
 
         total_sol_cost = sum(solution_cost)
         print(f"Average cost of solution path: {total_sol_cost / len(solution_cost)}")
@@ -217,7 +217,7 @@ def print_data(length_solution, length_search, execution_time, nb_no_solution):
         print(f"Total length of solution path: {total_length_sol}")
 
         print(f"Average length of search path: {total_length_search / len(length_search)}")
-        print(f"Total length of solution path: {total_length_search}")
+        print(f"Total length of search path: {total_length_search}")
 
         print(f"Average cost of solution path: {total_length_sol / len(length_solution)}")
         print(f"Total cost of solution path: {total_length_sol}")
