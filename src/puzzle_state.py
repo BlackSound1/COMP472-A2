@@ -1,5 +1,6 @@
 from copy import deepcopy
 import time
+import heapq
 
 class PuzzleState:
     """Represents a puzzle state"""
@@ -16,6 +17,9 @@ class PuzzleState:
 
     def __eq__(self, other_state):
         return self.state == other_state.state
+
+    def __lt__(self, other_state):
+        return self._f_value < other_state._f_value
 
     def __hash__(self):
         return hash(('state', list(self.state)))
@@ -148,16 +152,18 @@ class PuzzleState:
         current_state = start_state
         current_state.set_f_value(heuristic_func, goal_state)
         open_list = [start_state]
+        heapq.heapify(open_list)
         closed_list = []
         highest_value = goal_state.size**2 - 1
 
         start_time = time.time()
         elapsed = 0.0
 
-        def compare_and_replace_state_in_list(state, state_list):
-            if has_smaller_f_in_list(state, state_list):
-                old_state_index = state_list.index(state)
-                state_list[old_state_index] = state
+        def compare_and_replace_state_in_heap(state, state_heap):
+            if has_smaller_f_in_list(state, state_heap):
+                old_state_index = state_heap.index(state)
+                state_heap[old_state_index] = state
+                heapq.heapify(state_heap)
 
         def has_smaller_f_in_list(state, state_list):
             old_state_index = state_list.index(state)
@@ -168,9 +174,9 @@ class PuzzleState:
                 return True
             return False
 
-        while PuzzleState.hamming_distance(current_state, goal_state) != 0 and len(open_list) != 0:
+        while current_state != goal_state and len(open_list) != 0:
             elapsed = time.time() - start_time
-            current_state = open_list[0]
+            current_state = heapq.heappop(open_list)
 
             if elapsed > 60.0:
                 return None, None, elapsed
@@ -183,15 +189,13 @@ class PuzzleState:
                         if (hasattr(heuristic_func, 'monotonic') and 
                                 not heuristic_func.monotonic and 
                                 has_smaller_f_in_list(state, closed_list)):
-                            open_list.append(state)
+                            heapq.heappush(open_list, state)
                     elif state in open_list:
-                        compare_and_replace_state_in_list(state, open_list)
+                        compare_and_replace_state_in_heap(state, open_list)
                     else:
-                        open_list.append(state)
+                        heapq.heappush(open_list, state)
 
             closed_list.append(current_state)
-            del open_list[0]
-            open_list.sort(key=lambda x: x.get_f_value())
 
         if len(open_list) == 0:
             return [], closed_list, elapsed
