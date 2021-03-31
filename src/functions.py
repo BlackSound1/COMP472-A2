@@ -135,7 +135,7 @@ def output_to_files(puzzle_type: str, puzzle_number: int, search_path: str, solu
 def write_to_solution_file(solution_file, solution_path, elapsed):
     with open(solution_file, 'wt') as file:
         file.write('Solution Path:\n')
-        if elapsed > 60.0:
+        if not solution_path:
             file.write("no solution")
         else:
             for index, state in enumerate(solution_path):
@@ -146,7 +146,7 @@ def write_to_solution_file(solution_file, solution_path, elapsed):
 def write_to_search_file(search_file, search_path, elapsed):
     with open(search_file, 'wt') as file:
         file.write("Search Path:\n")
-        if elapsed > 60.0:
+        if not search_path:
             file.write("no solution")
         else:
             for index, state in enumerate(search_path):

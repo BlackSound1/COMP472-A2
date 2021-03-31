@@ -149,7 +149,7 @@ class PuzzleState:
         return sum
 
     @staticmethod
-    def a_star(start_state, goal_state, heuristic_func):
+    def a_star(start_state, goal_state, heuristic_func, time_limit=60):
         current_state = start_state
         current_state.set_f_value(heuristic_func, goal_state)
         open_list = [start_state]
@@ -179,7 +179,7 @@ class PuzzleState:
             elapsed = time.time() - start_time
             current_state = heapq.heappop(open_list)
 
-            if elapsed > 60.0:
+            if elapsed > time_limit:
                 return None, None, elapsed
 
             for start in range(1, highest_value + 1):
@@ -216,7 +216,7 @@ class PuzzleState:
         return path_list, closed_list, elapsed
 
     @staticmethod
-    def depth_first_search(start, goal, max_iter=-1):
+    def depth_first_search(start, goal, max_iter=-1, time_limit=60):
         open_list = []
         closed_list = []
         open_list.append(start)
@@ -225,7 +225,7 @@ class PuzzleState:
         elapsed = 0.0
         while open_list:
             elapsed = time.time() - start_time
-            if elapsed > 60.0:
+            if elapsed > time_limit:
                 return None, None, elapsed
 
             current_state = open_list.pop()
@@ -250,7 +250,7 @@ class PuzzleState:
         return None, closed_list, elapsed
 
     @staticmethod
-    def iterative_deepening(start, goal, max_depth):
+    def iterative_deepening(start, goal, max_depth, time_limit=60):
         search_path = []
         start_time = time.time()
         elapsed = 0.0
@@ -258,10 +258,10 @@ class PuzzleState:
         for i in range(max_depth + 1):
             # time.sleep(0.1)  # Demonstrates that Iterative Deepening really is just fast and doesn't take 0.0 seconds
             elapsed = time.time() - start_time
-            if elapsed > 60.0:
+            if elapsed > time_limit:
                 return None, None, elapsed
 
-            solution_path, search_path, _ = PuzzleState.depth_first_search(start, goal, i)
+            solution_path, search_path, _ = PuzzleState.depth_first_search(start, goal, i, time_limit)
             if solution_path:
                 return solution_path, search_path, elapsed
         return None, search_path, elapsed
