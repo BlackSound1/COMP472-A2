@@ -55,16 +55,16 @@ def write_goal_state_to_file(list_of_possible_numbers: list, size: int) -> None:
         file.write(str(goal_state))
 
 
-def write_puzzles_to_file(tuple_of_tuples: tuple) -> None:
+def write_puzzles_to_file(list_of_tuples: list) -> None:
     """ Writes all automatically-generated puzzles to their appropriate file
 
-    :param tuple_of_tuples: All the puzzles to write
+    :param list_of_tuples: All the puzzles to write
     :return: None
     """
     with open('../input/input_puzzles.txt', 'w') as file:
         file.flush()
-        for tup in tuple_of_tuples:
-            file.write(str(tup) + '\n')
+        for ls in list_of_tuples:
+            file.write(str(ls) + '\n')
 
 
 def create_tuple_of_tuples_of_numbers(list_of_possible_numbers: list, size: int) -> tuple:
@@ -136,6 +136,8 @@ def testing() -> None:
 
     :return: None
     """
+    time_limit = 60
+
     # Tests
     state = PuzzleState(((1, 2, 3), (4, 5, 6), (7, 8, 9)))
     goal = PuzzleState(((2, 1, 3), (9, 6, 4), (7, 8, 5)))
@@ -158,7 +160,7 @@ def testing() -> None:
 
     for heuristic in heuristics:
         print(heuristic.__name__, "path")
-        search_list = PuzzleState.a_star(start_state, goal_state, heuristic)
+        search_list = PuzzleState.a_star(start_state, goal_state, heuristic, time_limit)
 
         for index, state in enumerate(search_list):
             print(state, state.level)
@@ -269,7 +271,19 @@ def print_astar_data(heuristic,
                      solution_cost,
                      search_cost,
                      execution_time,
-                     nb_no_solution):
+                     nb_no_solution: int) -> None:
+    """ Prints the final details of the A* algorithms to the console
+
+    :param heuristic: The heuristic being used
+    :param length_solution: The total length of the solution path
+    :param length_search:  The total length of the search path
+    :param solution_cost:  The total cost of the solution path
+    :param search_cost:  The total cost of the search path
+    :param execution_time:  The total time the algorithm took
+    :param nb_no_solution:  the total number of times no solution was found
+    :return: None
+    """
+
     print(f"\n---A* {heuristic.__name__} data---")
     if length_solution:
         total_length_sol = sum(length_solution)
@@ -295,7 +309,16 @@ def print_astar_data(heuristic,
     print(f"Total number of no solution: {nb_no_solution}\n")
 
 
-def print_data(length_solution, length_search, execution_time, nb_no_solution):
+def print_data(length_solution, length_search, execution_time, nb_no_solution: int) -> None:
+    """ Prints the final details of the non-A* algorithms to the console
+
+    :param length_solution: The length of the solution path
+    :param length_search:  The length of the search path
+    :param execution_time:  The time the algorithm took
+    :param nb_no_solution:  the number of times no solution was found
+    :return: None
+    """
+
     if length_solution:
         total_length_sol = sum(length_solution)
         total_length_search = sum(length_search)

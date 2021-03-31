@@ -8,14 +8,14 @@ def main():
     puzzles = [read_state(x) for x in get_all_puzzles()]
     time_limit = 60
 
-    test_Astar_on_20_puzzles(goal_state, puzzles, time_limit)
-    test_dfs_on_20_puzzles(goal_state, puzzles, time_limit)
-    test_iter_deepening_on_20_puzzles(goal_state, puzzles, 100, time_limit)
+    test_Astar_on_puzzles(goal_state, puzzles, time_limit)
+    test_dfs_on_puzzles(goal_state, puzzles, time_limit)
+    test_iter_deepening_on_puzzles(goal_state, puzzles, 100, time_limit)
 
     # testing()
 
 
-def test_Astar_on_20_puzzles(goal: tuple, puzzles: list, time_limit) -> None:
+def test_Astar_on_puzzles(goal: tuple, puzzles: list, time_limit) -> None:
     """ Runs the A* algorithm on all puzzles using each heuristic.
 
     The heuristics we use are: sum permutation, Hamming distance, and a
@@ -75,7 +75,8 @@ def test_Astar_on_20_puzzles(goal: tuple, puzzles: list, time_limit) -> None:
                          execution_time,
                          nb_no_solution)
 
-def test_dfs_on_20_puzzles(goal: tuple, puzzles: list, time_limit) -> None:
+
+def test_dfs_on_puzzles(goal: tuple, puzzles: list, time_limit) -> None:
     """ Runs the DFS algorithm on all puzzles
 
     :param goal: The goal state
@@ -115,7 +116,8 @@ def test_dfs_on_20_puzzles(goal: tuple, puzzles: list, time_limit) -> None:
     print(f"---DFS data---")
     print_data(length_solution, length_search, execution_time, nb_no_solution)
 
-def test_iter_deepening_on_20_puzzles(goal: tuple, puzzles: list, max_depth: int, time_limit) -> None:
+
+def test_iter_deepening_on_puzzles(goal: tuple, puzzles: list, max_depth: int, time_limit) -> None:
     """ Runs the DFS algorithm with iterative deepening on all puzzles
 
     :param goal: The goal state

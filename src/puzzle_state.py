@@ -54,7 +54,7 @@ class PuzzleState:
             state_as_list.append(list(row))
         self._state = state_as_list
 
-    def get_f_value(self) -> tuple:
+    def get_f_value(self) -> int:
         """ Gets the f value
 
         :return: The f value
@@ -216,9 +216,10 @@ class PuzzleState:
         return sum
 
     @staticmethod
-    def a_star(start_state, goal_state, heuristic_func) -> tuple:
+    def a_star(start_state, goal_state, heuristic_func, time_limit=60) -> tuple:
         """ Performs the A* algorithm.
 
+        :param time_limit: The time limit
         :param start_state: The Starting PuzzleState
         :param goal_state: The goal state
         :param heuristic_func: The heuristic function to use for the algorithm
@@ -235,7 +236,14 @@ class PuzzleState:
         start_time = time.time()
         elapsed = 0.0
 
-        def compare_and_replace_state_in_heap(state, state_heap):
+        def compare_and_replace_state_in_heap(state, state_heap) -> None:
+            """ Replaces the current PuzzleState with one that already exists in
+            the given list, if this current PuzzleState has a lower f value
+
+            :param state_heap: The heap of states to check against
+            :param state: The given PuzzleState
+            :return: None
+            """
             if has_smaller_f_in_list(state, state_heap):
                 old_state_index = state_heap.index(state)
                 state_heap[old_state_index] = state
@@ -300,6 +308,7 @@ class PuzzleState:
     def depth_first_search(start, goal, max_iter: int = -1, time_limit=60) -> tuple:
         """ Performs the Depth First Search algorithm
 
+        :param time_limit: The time limit
         :param start: The starting PuzzleState
         :param goal: The goal state
         :param max_iter: the maximum number of iteration to perform. Default is -1.
@@ -341,6 +350,7 @@ class PuzzleState:
     def iterative_deepening(start, goal, max_depth: int, time_limit=60) -> tuple:
         """ Performs the Depth First Search algorithm, this time with iterative deepening
 
+        :param time_limit: The time limit
         :param start: The starting PuzzleState
         :param goal: The goal state
         :param max_depth: The maximum depth to search to
