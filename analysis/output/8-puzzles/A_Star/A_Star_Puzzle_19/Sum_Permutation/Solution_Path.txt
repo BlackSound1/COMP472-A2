@@ -1,0 +1,13 @@
+Solution Path:
+State: [[8, 2, 5], [7, 6, 1], [4, 9, 3]] Level: 0 F-value:(20, 20)
+State: [[8, 2, 5], [4, 6, 1], [7, 9, 3]] Level: 1 F-value:(18, 17)
+State: [[8, 2, 1], [4, 6, 5], [7, 9, 3]] Level: 2 F-value:(16, 14)
+State: [[8, 1, 2], [4, 6, 5], [7, 9, 3]] Level: 3 F-value:(16, 13)
+State: [[1, 8, 2], [4, 6, 5], [7, 9, 3]] Level: 4 F-value:(16, 12)
+State: [[1, 2, 8], [4, 6, 5], [7, 9, 3]] Level: 5 F-value:(16, 11)
+State: [[1, 2, 5], [4, 6, 8], [7, 9, 3]] Level: 6 F-value:(14, 8)
+State: [[1, 2, 5], [4, 6, 3], [7, 9, 8]] Level: 7 F-value:(12, 5)
+State: [[1, 2, 3], [4, 6, 5], [7, 9, 8]] Level: 8 F-value:(10, 2)
+State: [[1, 2, 3], [4, 5, 6], [7, 9, 8]] Level: 9 F-value:(10, 1)
+State: [[1, 2, 3], [4, 5, 6], [7, 8, 9]] Level: 10 F-value:(10, 0)
+Time taken: 0.02200007438659668
