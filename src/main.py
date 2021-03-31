@@ -33,14 +33,11 @@ def test_Astar_on_20_puzzles(goal, puzzles):
 
         print(heuristic.__name__, "path")
         for idx, puzzle in enumerate(puzzles, 1):
-            # print("\nPuzzle " + str(idx) + ":\n")
-            # Test A* using all heuristics
+            print("\nPuzzle", idx, puzzle)
             start = puzzle
 
             start_state = PuzzleState(start, 0)
             goal_state = PuzzleState(goal, 0)
-            # print("start:", start_state)
-            # print("goal:", goal_state)
             solution_path, search_path, elapsed = PuzzleState.a_star(start_state, goal_state, heuristic)
 
             output_to_files("A_Star", idx, search_path, solution_path, elapsed, heuristic=heuristic.__name__)
@@ -61,9 +58,7 @@ def test_Astar_on_20_puzzles(goal, puzzles):
                 search_cost.append(total_search)
                 solution_cost.append(total_sol)
 
-                # for index, state in enumerate(search_path):
-                #     print(state, state.level)
-                # print("Time taken: " + str(elapsed))
+                print("Time taken: " + str(elapsed))
 
         print_astar_data(heuristic,
                          length_solution,
@@ -85,14 +80,11 @@ def test_dfs_on_20_puzzles(goal, puzzles):
     execution_time = []
 
     for idx, puzzle in enumerate(puzzles, 1):
-        # print("\nPuzzle " + str(idx) + ":\n")
-        # Depth-First Search
+        print("\nPuzzle", idx, puzzle)
         start = puzzle
 
         start_state = PuzzleState(start, 0)
         goal_state = PuzzleState(goal, 0)
-        # print("start:", start_state)
-        # print("goal:", goal_state)
 
         dfs_solution_path, dfs_search_path, elapsed = PuzzleState.depth_first_search(start_state, goal_state)
         
@@ -106,14 +98,9 @@ def test_dfs_on_20_puzzles(goal, puzzles):
             length_solution.append(len(dfs_solution_path))
             execution_time.append(elapsed)
 
-            # print("search path:")
-            # for index, state in enumerate(dfs_search_path):
-            #     print(state, state.level)
-            # print("solution path:")
-            # print_solution_path(dfs_solution_path)
-            # print("Time taken: " + str(elapsed))
+            print("Time taken: " + str(elapsed))
 
-    print(f"DFS data")
+    print(f"---DFS data---")
     print_data(length_solution, length_search, execution_time, nb_no_solution)
 
 
@@ -128,14 +115,11 @@ def test_iter_deepening_on_20_puzzles(goal, puzzles, max_depth):
     execution_time = []
 
     for idx, puzzle in enumerate(puzzles, 1):
-        # print("\nPuzzle " + str(idx) + ":\n")
-        # Iterative Deepening
+        print("\nPuzzle", idx, puzzle)
         start = puzzle
 
         start_state = PuzzleState(start, 0)
         goal_state = PuzzleState(goal, 0)
-        # print("start:", start_state)
-        # print("goal:", goal_state)
 
         iter_solution_path, iter_search_path, elapsed = PuzzleState.iterative_deepening(start_state, goal_state, max_depth)
 
@@ -149,14 +133,9 @@ def test_iter_deepening_on_20_puzzles(goal, puzzles, max_depth):
             length_solution.append(len(iter_solution_path))
             execution_time.append(elapsed)
 
-            # print("search path:")
-            # for index, state in enumerate(iter_search_path):
-            #     print(state, state.level)
-            # print("solution path:")
-            # print_solution_path(iter_solution_path)
-            # print("Time taken: " + str(elapsed))
+            print("Time taken: " + str(elapsed))
 
-    print(f"Iterative Deepening data")
+    print(f"---Iterative Deepening data---")
     print_data(length_solution, length_search, execution_time, nb_no_solution)
 
 

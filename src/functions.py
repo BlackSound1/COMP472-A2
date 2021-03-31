@@ -183,7 +183,7 @@ def print_astar_data(heuristic,
                      search_cost,
                      execution_time,
                      nb_no_solution):
-    print(f"\nA* {heuristic.__name__} data")
+    print(f"\n---A* {heuristic.__name__} data---")
     if length_solution:
         total_length_sol = sum(length_solution)
         print(f"Average length of solution path: {total_length_sol / len(length_solution)}")
