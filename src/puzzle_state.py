@@ -10,6 +10,7 @@ class PuzzleState:
         self._size = len(state)
         self._parent = parent
         self._level = level
+        self._f_value = 0
         self._set_positions()
 
     def __str__(self):

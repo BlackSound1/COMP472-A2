@@ -139,7 +139,7 @@ def write_to_solution_file(solution_file, solution_path, elapsed):
             file.write("no solution")
         else:
             for index, state in enumerate(solution_path):
-                file.write('State: ' + str(state) + ' Level: ' + str(state.level) + '\n')
+                file.write('State: ' + str(state) + ' Level: ' + str(state.level) + ' F-value:' + str(state.get_f_value()) + '\n')
             file.write("Time taken: " + str(elapsed))
 
 
@@ -150,7 +150,7 @@ def write_to_search_file(search_file, search_path, elapsed):
             file.write("no solution")
         else:
             for index, state in enumerate(search_path):
-                file.write("State: " + str(state) + ' Level: ' + str(state.level) + '\n')
+                file.write('State: ' + str(state) + ' Level: ' + str(state.level) + ' F-value:' + str(state.get_f_value()) + '\n')
             file.write("Time taken: " + str(elapsed))
 
 
