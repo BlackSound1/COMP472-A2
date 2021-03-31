@@ -1,5 +1,6 @@
 from copy import deepcopy
 import time
+import heapq
 
 class PuzzleState:
     """Represents a puzzle state"""
@@ -9,6 +10,7 @@ class PuzzleState:
         self._size = len(state)
         self._parent = parent
         self._level = level
+        self._f_value = 0
         self._set_positions()
 
     def __str__(self):
@@ -16,6 +18,9 @@ class PuzzleState:
 
     def __eq__(self, other_state):
         return self.state == other_state.state
+
+    def __lt__(self, other_state):
+        return self._f_value < other_state._f_value
 
     def __hash__(self):
         return hash(('state', list(self.state)))
@@ -144,20 +149,22 @@ class PuzzleState:
         return sum
 
     @staticmethod
-    def a_star(start_state, goal_state, heuristic_func):
+    def a_star(start_state, goal_state, heuristic_func, time_limit=60):
         current_state = start_state
         current_state.set_f_value(heuristic_func, goal_state)
         open_list = [start_state]
+        heapq.heapify(open_list)
         closed_list = []
         highest_value = goal_state.size**2 - 1
 
         start_time = time.time()
         elapsed = 0.0
 
-        def compare_and_replace_state_in_list(state, state_list):
-            if has_smaller_f_in_list(state, state_list):
-                old_state_index = state_list.index(state)
-                state_list[old_state_index] = state
+        def compare_and_replace_state_in_heap(state, state_heap):
+            if has_smaller_f_in_list(state, state_heap):
+                old_state_index = state_heap.index(state)
+                state_heap[old_state_index] = state
+                heapq.heapify(state_heap)
 
         def has_smaller_f_in_list(state, state_list):
             old_state_index = state_list.index(state)
@@ -168,11 +175,11 @@ class PuzzleState:
                 return True
             return False
 
-        while PuzzleState.hamming_distance(current_state, goal_state) != 0 and len(open_list) != 0:
+        while current_state != goal_state and len(open_list) != 0:
             elapsed = time.time() - start_time
-            current_state = open_list[0]
+            current_state = heapq.heappop(open_list)
 
-            if elapsed > 60.0:
+            if elapsed > time_limit:
                 return None, None, elapsed
 
             for start in range(1, highest_value + 1):
@@ -183,15 +190,13 @@ class PuzzleState:
                         if (hasattr(heuristic_func, 'monotonic') and 
                                 not heuristic_func.monotonic and 
                                 has_smaller_f_in_list(state, closed_list)):
-                            open_list.append(state)
+                            heapq.heappush(open_list, state)
                     elif state in open_list:
-                        compare_and_replace_state_in_list(state, open_list)
+                        compare_and_replace_state_in_heap(state, open_list)
                     else:
-                        open_list.append(state)
+                        heapq.heappush(open_list, state)
 
             closed_list.append(current_state)
-            del open_list[0]
-            open_list.sort(key=lambda x: x.get_f_value())
 
         if len(open_list) == 0:
             return [], closed_list, elapsed
@@ -211,7 +216,7 @@ class PuzzleState:
         return path_list, closed_list, elapsed
 
     @staticmethod
-    def depth_first_search(start, goal, max_iter=-1):
+    def depth_first_search(start, goal, max_iter=-1, time_limit=60):
         open_list = []
         closed_list = []
         open_list.append(start)
@@ -220,7 +225,7 @@ class PuzzleState:
         elapsed = 0.0
         while open_list:
             elapsed = time.time() - start_time
-            if elapsed > 60.0:
+            if elapsed > time_limit:
                 return None, None, elapsed
 
             current_state = open_list.pop()
@@ -245,7 +250,7 @@ class PuzzleState:
         return None, closed_list, elapsed
 
     @staticmethod
-    def iterative_deepening(start, goal, max_depth):
+    def iterative_deepening(start, goal, max_depth, time_limit=60):
         search_path = []
         start_time = time.time()
         elapsed = 0.0
@@ -253,10 +258,10 @@ class PuzzleState:
         for i in range(max_depth + 1):
             # time.sleep(0.1)  # Demonstrates that Iterative Deepening really is just fast and doesn't take 0.0 seconds
             elapsed = time.time() - start_time
-            if elapsed > 60.0:
+            if elapsed > time_limit:
                 return None, None, elapsed
 
-            solution_path, search_path, _ = PuzzleState.depth_first_search(start, goal, i)
+            solution_path, search_path, _ = PuzzleState.depth_first_search(start, goal, i, time_limit)
             if solution_path:
                 return solution_path, search_path, elapsed
         return None, search_path, elapsed

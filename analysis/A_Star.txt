@@ -1,0 +1,59 @@
+
+3 x 3
+
+A* sum_permutation data
+Average length of solution path: 13.5
+Total length of solution path: 270
+Average length of search path: 96.3
+Total length of search path: 1926
+Average cost of solution path: 188.7
+Total cost of solution path: 3774
+Average cost of search path: 1265.25
+Total cost of search path: 25305
+Average execution time: 1.2446999549865723
+Total execution time: 24.893999099731445
+Total number of no solution: 0
+
+A* hamming_distance data
+Average length of solution path: 9.8125
+Total length of solution path: 157
+Average length of search path: 222.0
+Total length of search path: 3552
+Average cost of solution path: 86.1875
+Total cost of solution path: 1379
+Average cost of search path: 2134.4375
+Total cost of search path: 34151
+Average execution time: 5.580500543117523
+Total execution time: 89.28800868988037
+Total number of no solution: 4
+
+A* manhattan_distance data
+Average length of solution path: 10.4
+Total length of solution path: 208
+Average length of search path: 145.6
+Total length of search path: 2912
+Average cost of solution path: 93.5
+Total cost of solution path: 1870.0
+Average cost of search path: 1473.8
+Total cost of search path: 29476.0
+Average execution time: 5.048044884204865
+Total execution time: 100.96089768409729
+Total number of no solution: 0
+
+
+
+
+4 x 4
+
+A* manhattan_distance data
+Average length of solution path: 21.0
+Total length of solution path: 84
+Average length of search path: 1198.5
+Total length of search path: 4794
+Average cost of solution path: 414.0
+Total cost of solution path: 1656.0
+Average cost of search path: 23426.5
+Total cost of search path: 93706.0
+Average execution time: 765.4063579440117
+Total execution time: 3061.6254317760468
+Total number of no solution: 16
