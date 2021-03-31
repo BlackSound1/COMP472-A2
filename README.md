@@ -21,7 +21,7 @@ each sub-tuple.
     3. Finally, in the `main.py` file, comment-out the `create_20_random_puzzles()` function call to avoid automatic puzzle 
 and goal-state generation.
 
-    4. Then run as normal.
+    4. Then run as normal. `py src/main.py`
     
 - If you want to run the code normally, i.e. using automatic puzzle and goal-state generation:
 
