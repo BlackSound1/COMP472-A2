@@ -1,6 +1,6 @@
 # COMP472-A2
 
-## Link to repository: https://github.com/BlackSound1/COMP472-A2
+## Link to repository: https://github.com/BlackSound1/Solving-S-Puzzles-With-Search-Algorithms
 
 ## How to run:
 - If you want to input your own puzzles and goal state:
