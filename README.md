@@ -1,4 +1,4 @@
-# COMP472-A2
+# Solving S Puzzles With Search Algorithms
 
 ## Link to repository: https://github.com/BlackSound1/Solving-S-Puzzles-With-Search-Algorithms
 
